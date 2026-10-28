@@ -44,7 +44,7 @@
     .chat-item { display: flex; align-items: center; gap: 14px; padding: 13px 8px; border-radius: 16px; cursor: pointer; transition: background 0.15s; }
     .chat-item:active { background: var(--bg-card-hover); }
 
-    /* AVATARES QUADRADOS COM BORDAS ARREDONDADAS */
+    /* AVATARES QUADRADOS COM BORDAS ARREDONDADAS (Conversas, Perfil, Chat) */
     .avatar-wrap { width: 52px; height: 52px; border-radius: 14px; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .avatar-ring { position: absolute; inset: 0; border-radius: 14px; border: 2px solid var(--accent-blue); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
     .avatar-img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; background: #1e293b; display: block; }
@@ -56,7 +56,7 @@
     .chat-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .chat-msg { font-size: 13px; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* RADAR E NÓS DA REDE */
+    /* RADAR E NÓS DA REDE (AVATARES CIRCULARES/REDONDOS APENAS NESSA ABA) */
     .network-radar-box { background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(3, 7, 18, 0.7) 100%); border: 1px solid var(--border-soft); border-radius: 28px; height: 290px; position: relative; display: flex; align-items: center; justify-content: center; margin-top: 10px; overflow: hidden; }
     .radar-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(56, 189, 248, 0.2); }
     .rc-1 { width: 90px; height: 90px; }
@@ -65,15 +65,19 @@
     .radar-pulse-beam { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 1.5px solid var(--accent-blue); animation: pulseRadar 3.2s infinite; pointer-events: none; }
     @keyframes pulseRadar { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.2); opacity: 0; } }
 
-    .center-node { z-index: 10; width: 54px; height: 54px; border-radius: 14px; background: #0284c7; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px #0284c7; position: relative; overflow: hidden; padding: 2px; }
-    .center-node-img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
+    /* NÓ CENTRAL 100% REDONDO */
+    .center-node { z-index: 10; width: 56px; height: 56px; border-radius: 50%; background: #0284c7; border: 2.5px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px #0284c7; position: relative; overflow: hidden; padding: 0; }
+    .center-node-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+    
     .radar-nodes-layer { position: absolute; inset: 0; pointer-events: auto; z-index: 20; }
     .peer-node { position: absolute; transform: translate(-50%, -50%); cursor: pointer; display: flex; flex-direction: column; align-items: center; z-index: 25; transition: transform 0.3s ease; }
     .peer-node:hover { transform: translate(-50%, -50%) scale(1.15); }
-    .peer-dot { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #fff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.6); overflow: hidden; background: #0a1733; padding: 2px; }
+    
+    /* PONTOS DOS PEERS 100% REDONDOS */
+    .peer-dot { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.6); overflow: hidden; background: #0a1733; padding: 0; }
     .peer-dot.internet { border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.7); }
     .peer-dot.bluetooth { border-color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.7); }
-    .peer-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; display: block; }
+    .peer-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
     .peer-label { font-size: 10px; color: #fff; background: rgba(5, 11, 24, 0.85); padding: 1px 6px; border-radius: 6px; margin-top: 3px; white-space: nowrap; border: 1px solid var(--border-soft); max-width: 75px; overflow: hidden; text-overflow: ellipsis; }
 
     .bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 74px; background: rgba(5, 11, 24, 0.92); backdrop-filter: blur(20px); border-top: 1px solid rgba(56, 189, 248, 0.12); display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 50; }
@@ -82,16 +86,37 @@
     .nav-btn.active { color: var(--accent-blue); }
     .nav-btn.active svg { filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7)); }
 
-    /* TELAS DE LOGIN & CHAT ROOM */
-    .auth-overlay { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; padding: 32px 24px; }
-    .auth-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 8px; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
-    .auth-desc { font-size: 12px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.5; }
+    /* ================= TELA DE LOGIN (COM IMAGEM PERSONALIZÁVEL) ================= */
+    .auth-overlay-art { position: absolute; inset: 0; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 24px 34px 24px; overflow: hidden; background: #040714; }
+    .auth-bg-custom-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; pointer-events: none; }
+    .auth-bg-dimmer { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,7,20,0.6) 0%, rgba(4,7,20,0.15) 35%, rgba(4,7,20,0.85) 100%); z-index: 2; pointer-events: none; }
+    
+    .auth-top-branding { z-index: 10; text-align: center; margin-top: 6px; }
+    .auth-app-title { font-size: 46px; font-weight: 800; letter-spacing: -1.5px; background: linear-gradient(135deg, #38bdf8 0%, #818cf8 45%, #c084fc 90%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 35px rgba(129, 140, 248, 0.6); margin-bottom: 6px; }
+    .auth-app-subtitle { font-size: 15px; font-weight: 500; color: #f1f5f9; letter-spacing: -0.2px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85); }
+    
+    .auth-bottom-block { z-index: 10; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 24px; margin-bottom: 8px; }
+    .auth-manifesto-list { text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .auth-manifesto-list p { font-size: 16px; font-weight: 500; color: #f8fafc; letter-spacing: -0.2px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95); }
+    .btn-pill-conectar { width: 100%; max-width: 310px; height: 54px; border-radius: 9999px; background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%); border: none; color: #fff; font-size: 16px; font-weight: 700; letter-spacing: -0.2px; cursor: pointer; box-shadow: 0 6px 28px rgba(99, 102, 241, 0.45); transition: transform 0.15s, box-shadow 0.15s; display: flex; align-items: center; justify-content: center; }
+    .btn-pill-conectar:active { transform: scale(0.98); box-shadow: 0 2px 14px rgba(37, 99, 235, 0.6); }
+
+    .auth-sheet-backdrop { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.88); backdrop-filter: blur(12px); z-index: 120; display: none; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease-in-out; }
+    .auth-sheet-card { width: 100%; background: #070e20; border-top: 1.5px solid var(--border-soft); border-radius: 28px 28px 0 0; padding: 24px 20px 32px 20px; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8); }
+
     .input-field { width: 100%; background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: 14px; padding: 14px; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; transition: border-color 0.2s; }
     .input-field:focus { border-color: var(--accent-blue); box-shadow: 0 0 12px rgba(56, 189, 248, 0.2); }
     .btn-primary { width: 100%; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; border-radius: 14px; padding: 14px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 0 20px rgba(37, 99, 235, 0.4); }
-    
+
+    /* ================= SALA DE CHAT ================= */
     .chat-room-overlay { position: absolute; inset: 0; background: var(--bg-phone); z-index: 60; display: none; flex-direction: column; }
-    .chat-room-header { height: 60px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; padding: 0 16px; gap: 12px; background: rgba(10, 19, 41, 0.9); }
+    .chat-room-header { height: 60px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; padding: 0 14px; gap: 8px; background: rgba(10, 19, 41, 0.95); backdrop-filter: blur(16px); }
+    .chat-room-user-group { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .chat-room-avatar-thumb { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; background: #0a1733; border: 1.5px solid var(--border-soft); flex-shrink: 0; }
+    .chat-room-text-col { display: flex; flex-direction: column; min-width: 0; justify-content: center; }
+    .chat-room-target-name { font-size: 15px; font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+    .chat-room-user-status { font-size: 11px; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 1px; }
+
     .chat-room-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .chat-bubble { max-width: 78%; padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.4; word-break: break-word; }
     .bubble-sent { align-self: flex-end; background: #0284c7; color: #fff; border-bottom-right-radius: 4px; }
@@ -155,29 +180,66 @@
       </div>
     </div>
 
-    <!-- TELA DE LOGIN -->
-    <div id="authScreen" class="auth-overlay">
-      <h2 class="auth-title">Acesso Seguro</h2>
-      <p class="auth-desc">Digite seu nome de usuário único e sua senha. Suas chaves de comunicação são criadas na memória agora.</p>
-      
-      <input type="text" id="authUsername" class="input-field" placeholder="Nome de Usuário Único (Ex: satoshi)">
-      <input type="password" id="authPassword" class="input-field" placeholder="Senha Forte">
-      
-      <button id="btnConectarSubmit" class="btn-primary" onclick="conectarApp()">Acessar Rede P2P</button>
-      <span style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px;">
-        🔒 Nome único garantido criptograficamente via Nostr
-      </span>
+    <!-- ================= TELA DE LOGIN ================= -->
+    <div id="authScreen" class="auth-overlay-art">
+      <!-- Cole o link da sua imagem no atributo src abaixo -->
+      <img id="loginBgImage" class="auth-bg-custom-img" src="" alt="Fundo">
+      <div class="auth-bg-dimmer"></div>
+
+      <!-- Topo: Branding _App -->
+      <div class="auth-top-branding">
+        <h1 class="auth-app-title">_App</h1>
+        <p class="auth-app-subtitle">Uma rede. Mil conexões.</p>
+      </div>
+
+      <!-- Rodapé: Manifesto e Botão Conectar -->
+      <div class="auth-bottom-block">
+        <div class="auth-manifesto-list">
+          <p>C/S Internet.</p>
+          <p>Sem servidores.</p>
+          <p>Apenas pessoas.</p>
+        </div>
+
+        <button class="btn-pill-conectar" onclick="abrirModalCredenciais()">
+          Conectar
+        </button>
+      </div>
+
+      <!-- Painel Modal de Acesso Seguro (Slide-up) -->
+      <div id="loginSheetModal" class="auth-sheet-backdrop" onclick="fecharModalCredenciais(event)">
+        <div class="auth-sheet-card" onclick="event.stopPropagation()">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 18px; font-weight: 700; color: #fff;">Acesso à Rede P2P</h3>
+            <button onclick="fecharModalCredenciais()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <input type="text" id="authUsername" class="input-field" placeholder="Nome de Usuário Único (Ex: satoshi)">
+          <input type="password" id="authPassword" class="input-field" placeholder="Senha Forte">
+          <button id="btnConectarSubmit" class="btn-pill-conectar" style="max-width: 100%; margin-top: 6px;" onclick="conectarApp()">
+            Entrar na Rede
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- SALA DE CHAT P2P -->
+    <!-- ================= SALA DE CHAT P2P ================= -->
     <div id="chatRoomOverlay" class="chat-room-overlay">
+      <div class="status-bar" style="background: rgba(10, 19, 41, 0.95);"></div>
       <div class="chat-room-header">
-        <button onclick="closeChatRoom()" style="background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        <button onclick="closeChatRoom()" style="background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; padding: 4px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <div style="flex: 1; min-width: 0;">
-          <h4 id="activeChatTargetName" style="font-size: 14px; font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Chat</h4>
-          <span style="font-size: 10px; color: var(--accent-blue);">● Canal Criptografado E2EE</span>
+
+        <div class="chat-room-user-group">
+          <!-- Miniatura do Avatar à esquerda do nome -->
+          <img id="activeChatAvatarImg" class="chat-room-avatar-thumb" src="" alt="Avatar">
+          
+          <!-- Nome do Usuário e Status Online/Visto por último -->
+          <div class="chat-room-text-col">
+            <h4 id="activeChatTargetName" class="chat-room-target-name">Usuário</h4>
+            <span id="activeChatUserStatus" class="chat-room-user-status">offline</span>
+          </div>
         </div>
       </div>
       
@@ -189,7 +251,7 @@
       </div>
     </div>
 
-    <!-- CABEÇALHO COM ÍCONES -->
+    <!-- STATUS BAR E CABEÇALHO PRINCIPAL -->
     <div class="status-bar"></div>
     <header class="top-header">
       <h1 class="app-brand">_App</h1>
@@ -209,7 +271,7 @@
       </div>
     </header>
 
-    <!-- SUBHEADER -->
+    <!-- SUBHEADER COM ABAS -->
     <div class="active-tab-title-bar">
       <span class="active-tab-title" id="pageHeaderTitle">Conversas</span>
       <div class="pill-switch-group" id="headerRedeActions">
@@ -234,7 +296,7 @@
         </div>
       </section>
 
-      <!-- ABA 2: REDE -->
+      <!-- ABA 2: REDE (AVATARES REDONDOS/CIRCULARES) -->
       <section id="tab-rede" class="tab-page">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span id="redeTitleStatus" style="font-size: 13px; color: var(--text-sub);">
@@ -251,10 +313,10 @@
           <div class="radar-circle rc-3"></div>
           <div class="radar-pulse-beam"></div>
 
-          <!-- NÓS DOS USUÁRIOS -->
+          <!-- NÓS DOS USUÁRIOS (CIRCULARES) -->
           <div id="radarNodesLayer" class="radar-nodes-layer"></div>
 
-          <!-- NÓ CENTRAL (FOTO DE PERFIL DO PRÓPRIO USUÁRIO) -->
+          <!-- NÓ CENTRAL (FOTO DE PERFIL CIRCULAR) -->
           <div class="center-node">
             <img id="radarCenterAvatarImg" class="center-node-img" src="https://api.dicebear.com/7.x/identicon/svg?seed=user" alt="Meu Avatar">
           </div>
@@ -348,6 +410,8 @@
     let myCurrentUsername = null;
     let pool = null;
     let activeChatTarget = null;
+    let chatStatusRefreshTimer = null;
+    let radarLiveCleanerTimer = null;
     const conversations = {};
 
     let currentRedeMode = 'internet';
@@ -356,7 +420,6 @@
     let presenceHeartbeatInterval = null;
     let cropperInstance = null;
 
-    // Relays públicos de alta performance
     const NOSTR_RELAYS = [
       'wss://relay.damus.io',
       'wss://nos.lol',
@@ -367,6 +430,16 @@
 
     function getAvatarUrl(seed) {
       return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(seed || 'anon')}`;
+    }
+
+    function abrirModalCredenciais() {
+      document.getElementById('loginSheetModal').style.display = 'flex';
+      document.getElementById('authUsername').focus();
+    }
+
+    function fecharModalCredenciais(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('loginSheetModal').style.display = 'none';
     }
 
     // EXPANSÃO DA FOTO DE PERFIL
@@ -457,17 +530,15 @@
       cancelarCrop();
     }
 
-    // ================= VALIDAÇÃO DE UNICIDADE DO NOME =================
+    // VALIDAÇÃO DE UNICIDADE DO NOME
     async function verificarNomeDisponivelNaRede(nomeDesejado, pubkeyAtual) {
       const nomeNormalizado = nomeDesejado.trim().toLowerCase();
       
-      // 1. Checa registro local prévio
       const registroLocal = localStorage.getItem('_App_registry_' + nomeNormalizado);
       if (registroLocal && registroLocal !== pubkeyAtual) {
         return false;
       }
 
-      // 2. Consulta os Relays Nostr em busca de quem já possui esse nome (Kind 30078 e 30315)
       const tempPool = new window.NostrTools.SimplePool();
       try {
         const events = await tempPool.list(NOSTR_RELAYS, [
@@ -489,7 +560,7 @@
             }
 
             if (nomeExistente && nomeExistente.trim().toLowerCase() === nomeNormalizado) {
-              return false; // Nome já em uso por outra chave
+              return false;
             }
           }
         }
@@ -497,10 +568,9 @@
         console.warn("Aviso na consulta de unicidade nos relays:", e);
       }
 
-      return true; // Nome liberado
+      return true;
     }
 
-    // Registra a posse do nome exclusivo na rede
     async function registrarPosseDoNome(u, pubkey, privkey) {
       if (!pool) return;
       const event = {
@@ -522,7 +592,7 @@
       } catch (e) {}
     }
 
-    // 1. LOGIN DETERMINÍSTICO COM VERIFICAÇÃO DE NOME ÚNICO
+    // 1. LOGIN DETERMINÍSTICO
     async function conectarApp() {
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value;
@@ -546,23 +616,22 @@
       const derivPrivKey = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
       const derivPubKey = window.NostrTools.getPublicKey(derivPrivKey);
 
-      // Bloqueia caso o nome já pertença a outro usuário
       const disponivel = await verificarNomeDisponivelNaRede(u, derivPubKey);
       if (!disponivel) {
         btn.disabled = false;
-        btn.textContent = "Acessar Rede P2P";
+        btn.textContent = "Entrar na Rede";
         return alert(`O nome de usuário "${u}" já está em uso por outro usuário. Cada usuário deve ter um nome único. Por favor, escolha outro.`);
       }
 
-      // Sucesso na validação
       myPrivKey = derivPrivKey;
       myPubKey = derivPubKey;
       myCurrentUsername = u;
 
       localStorage.setItem('_App_registry_' + u.toLowerCase(), myPubKey);
+      localStorage.setItem('_App_name_' + myPubKey, u);
 
       btn.disabled = false;
-      btn.textContent = "Acessar Rede P2P";
+      btn.textContent = "Entrar na Rede";
 
       const userAvatar = localStorage.getItem('_App_avatar_' + myPubKey) || getAvatarUrl(myPubKey);
 
@@ -570,17 +639,18 @@
       document.getElementById('profilePubkeyDisplay').textContent = myPubKey.substring(0, 10) + '...' + myPubKey.substring(myPubKey.length - 8);
       document.getElementById('profileAvatarImg').src = userAvatar;
       document.getElementById('radarCenterAvatarImg').src = userAvatar;
+      
+      document.getElementById('loginSheetModal').style.display = 'none';
       document.getElementById('authScreen').style.display = 'none';
 
       conectarRelaysNostr();
     }
 
-    // 2. CONEXÃO COM OS RELAYS E TRATAMENTO DE CONFLITOS DE NOME
+    // 2. CONEXÃO COM OS RELAYS COM SINCRONIZAÇÃO DE TEMPO REAL
     function conectarRelaysNostr() {
       pool = new window.NostrTools.SimplePool();
       document.getElementById('redeStatusBadge').textContent = '● CONECTADO AOS RELAYS';
 
-      // Mensagens diretas (kind 4)
       const subMessages = pool.sub(NOSTR_RELAYS, [
         { kinds: [4], '#p': [myPubKey] },
         { kinds: [4], authors: [myPubKey] }
@@ -611,14 +681,13 @@
           }
 
           if (!isSentByMe && isAppClient) {
-            registrarUsuarioOnlineInternet(otherUser);
+            registrarUsuarioOnlineInternet(otherUser, null, null, event.created_at * 1000);
           }
         } catch (err) {
           console.error("Falha ao descriptografar:", err);
         }
       });
 
-      // Assinatura de presença e registro de nomes
       const subPresence = pool.sub(NOSTR_RELAYS, [
         { kinds: [30315, 30078], '#t': [APP_IDENTIFIER], limit: 80 }
       ]);
@@ -630,34 +699,54 @@
 
           let name = event.pubkey.substring(0, 8);
           let avatar = null;
+          let status = 'online';
 
           try {
             const data = JSON.parse(event.content);
             if (data.name) name = data.name;
             if (data.avatar) avatar = data.avatar;
+            if (data.status) status = data.status;
           } catch (e) {
             const nameTag = event.tags.find(t => t[0] === 'name');
             if (nameTag) name = nameTag[1];
             else if (event.content && !event.content.startsWith('{')) name = event.content;
           }
 
-          // Se um usuário externo anunciar o mesmo nome já registrado por nós, suprime a duplicidade
           if (myCurrentUsername && name.trim().toLowerCase() === myCurrentUsername.toLowerCase()) {
             return;
           }
 
-          registrarUsuarioOnlineInternet(event.pubkey, name, avatar);
+          const eventTimestamp = (event.created_at || 0) * 1000;
+          
+          // Trata evento de saída ou atualização normal
+          if (status === 'offline') {
+            registrarUsuarioOffline(event.pubkey, name, avatar, eventTimestamp);
+          } else {
+            registrarUsuarioOnlineInternet(event.pubkey, name, avatar, eventTimestamp);
+          }
+
+          if (activeChatTarget === event.pubkey) {
+            atualizarCabecalhoChat(event.pubkey);
+          }
         }
       });
 
-      // Conexão inicial e propagação
       setTimeout(() => {
         registrarPosseDoNome(myCurrentUsername, myPubKey, myPrivKey);
         enviarSinalPresencaOnline();
       }, 1000);
 
+      // Transmissão periódica a cada 15s
       if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
-      presenceHeartbeatInterval = setInterval(enviarSinalPresencaOnline, 20000);
+      presenceHeartbeatInterval = setInterval(enviarSinalPresencaOnline, 15000);
+
+      // Limpador do radar em tempo real a cada 5s
+      if (radarLiveCleanerTimer) clearInterval(radarLiveCleanerTimer);
+      radarLiveCleanerTimer = setInterval(() => {
+        if (currentRedeMode === 'internet') {
+          renderRadarNodes();
+        }
+      }, 5000);
     }
 
     async function enviarSinalPresencaOnline() {
@@ -675,7 +764,7 @@
           ['client', APP_IDENTIFIER],
           ['name', u]
         ],
-        content: JSON.stringify({ name: u, avatar: netAvatar })
+        content: JSON.stringify({ name: u, avatar: netAvatar, status: 'online' })
       };
 
       event.id = window.NostrTools.getEventHash(event);
@@ -687,18 +776,45 @@
       } catch (e) {}
     }
 
-    function registrarUsuarioOnlineInternet(pubkey, name, avatar) {
-      const now = Date.now();
+    async function enviarSinalOffline() {
+      if (!myPrivKey || !myPubKey || !pool) return;
+      const u = myCurrentUsername || 'peer';
+      const event = {
+        kind: 30315,
+        pubkey: myPubKey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [
+          ['d', APP_IDENTIFIER],
+          ['t', APP_IDENTIFIER],
+          ['client', APP_IDENTIFIER],
+          ['status', 'offline']
+        ],
+        content: JSON.stringify({ name: u, status: 'offline', lastSeen: Date.now() })
+      };
+      event.id = window.NostrTools.getEventHash(event);
+      event.sig = window.NostrTools.signEvent(event, myPrivKey);
+      try {
+        const pubs = pool.publish(NOSTR_RELAYS, event);
+        if (Array.isArray(pubs)) await Promise.allSettled(pubs);
+      } catch (e) {}
+    }
+
+    function registrarUsuarioOnlineInternet(pubkey, name, avatar, timestamp) {
+      const eventTime = timestamp || Date.now();
       const existing = onlineInternetUsers.get(pubkey);
+
+      // Ignora se o evento recebido for mais antigo do que a última marcação conhecida
+      if (existing && existing.lastSeen > eventTime) {
+        return;
+      }
 
       const finalAvatar = avatar || (existing && existing.avatar) || localStorage.getItem('_App_avatar_' + pubkey) || getAvatarUrl(pubkey);
 
-      if (avatar) {
-        localStorage.setItem('_App_avatar_' + pubkey, avatar);
-      }
+      if (name) localStorage.setItem('_App_name_' + pubkey, name);
+      if (avatar) localStorage.setItem('_App_avatar_' + pubkey, avatar);
 
       if (existing) {
-        existing.lastSeen = now;
+        existing.lastSeen = eventTime;
         if (name) existing.name = name;
         existing.avatar = finalAvatar;
       } else {
@@ -710,12 +826,25 @@
           pubkey,
           name: name || pubkey.substring(0, 8),
           avatar: finalAvatar,
-          lastSeen: now,
+          lastSeen: eventTime,
           angle,
           radius
         });
       }
 
+      if (currentRedeMode === 'internet') {
+        renderRadarNodes();
+      }
+    }
+
+    function registrarUsuarioOffline(pubkey, name, avatar, timestamp) {
+      const eventTime = timestamp || Date.now();
+      const existing = onlineInternetUsers.get(pubkey);
+
+      if (existing) {
+        existing.lastSeen = eventTime - 60000; // Força status fora do limite de 45s
+        if (name) existing.name = name;
+      }
       if (currentRedeMode === 'internet') {
         renderRadarNodes();
       }
@@ -748,7 +877,7 @@
       renderRadarNodes();
     }
 
-    // 4. RENDERIZAR NÓS NO RADAR
+    // 4. RENDERIZAR NÓS NO RADAR (SOMENTE USUÁRIOS ONLINE - VISTOS EM MENOS DE 45s)
     function renderRadarNodes() {
       const layer = document.getElementById('radarNodesLayer');
       layer.innerHTML = '';
@@ -760,13 +889,13 @@
       const activeList = [];
       const now = Date.now();
 
-      // Garante que nomes duplicados não apareçam no radar
       const nomesNoMapa = new Set();
       if (myCurrentUsername) nomesNoMapa.add(myCurrentUsername.toLowerCase());
 
       nodesMap.forEach((user) => {
         if (isInternet) {
-          if (now - user.lastSeen < 75000) {
+          // Só exibe se estiver online de verdade (visto nos últimos 45 segundos)
+          if (now - user.lastSeen < 45000) {
             const userNomeLower = (user.name || '').toLowerCase();
             if (!nomesNoMapa.has(userNomeLower)) {
               nomesNoMapa.add(userNomeLower);
@@ -829,7 +958,10 @@
       peers.forEach(peer => {
         const msgs = conversations[peer];
         const lastMsg = msgs[msgs.length - 1];
-        const avatarSrc = localStorage.getItem('_App_avatar_' + peer) || (onlineInternetUsers.has(peer) ? onlineInternetUsers.get(peer).avatar : getAvatarUrl(peer));
+        const user = onlineInternetUsers.get(peer);
+        const peerName = (user && user.name) ? user.name : (localStorage.getItem('_App_name_' + peer) || peer.substring(0, 10) + '...');
+        const avatarSrc = localStorage.getItem('_App_avatar_' + peer) || (user ? user.avatar : getAvatarUrl(peer));
+        
         const item = document.createElement('div');
         item.className = 'chat-item';
         item.onclick = () => openChatRoom(peer);
@@ -840,7 +972,7 @@
           </div>
           <div class="chat-info">
             <div class="chat-header">
-              <span class="chat-name">${peer.substring(0, 10)}...</span>
+              <span class="chat-name">${peerName}</span>
               <span class="chat-time">${lastMsg ? lastMsg.time : ''}</span>
             </div>
             <div class="chat-footer">
@@ -852,13 +984,59 @@
       });
     }
 
-    // 6. NOVA CONVERSA & CHAT ROOM
+    // 6. FORMATAÇÃO DO STATUS REAL DE CONEXÃO (ESTILO WHATSAPP)
+    function calcularStatusWhatsApp(peer) {
+      const user = onlineInternetUsers.get(peer);
+      if (!user || !user.lastSeen) {
+        return 'offline';
+      }
+
+      const agora = Date.now();
+      const diffMs = agora - user.lastSeen;
+
+      // Online somente se o batimento de presença ocorreu nos últimos 45 segundos
+      if (diffMs < 45000) {
+        return 'online';
+      }
+
+      const dataVisto = new Date(user.lastSeen);
+      const hoje = new Date();
+      const horaFormatada = dataVisto.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (dataVisto.toDateString() === hoje.toDateString()) {
+        return `visto por último hoje às ${horaFormatada}`;
+      }
+
+      const ontem = new Date();
+      ontem.setDate(hoje.getDate() - 1);
+      if (dataVisto.toDateString() === ontem.toDateString()) {
+        return `visto por último ontem às ${horaFormatada}`;
+      }
+
+      const dataFormatada = dataVisto.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
+      return `visto por último em ${dataFormatada} às ${horaFormatada}`;
+    }
+
+    function atualizarCabecalhoChat(peer) {
+      const user = onlineInternetUsers.get(peer);
+      const peerName = (user && user.name) ? user.name : (localStorage.getItem('_App_name_' + peer) || peer.substring(0, 12) + '...');
+      const avatarSrc = (user && user.avatar) || localStorage.getItem('_App_avatar_' + peer) || getAvatarUrl(peer);
+
+      document.getElementById('activeChatTargetName').textContent = peerName;
+      document.getElementById('activeChatAvatarImg').src = avatarSrc;
+
+      const statusEl = document.getElementById('activeChatUserStatus');
+      const statusText = calcularStatusWhatsApp(peer);
+      statusEl.textContent = statusText;
+      statusEl.style.color = (statusText === 'online') ? '#38bdf8' : '#94a3b8';
+    }
+
     function iniciarNovaConversaPrompt() {
       const target = prompt("Cole a Chave Pública Nostr do seu amigo (formato Hex):");
       if (target && target.trim().length === 64) {
         const key = target.trim();
         if (!conversations[key]) conversations[key] = [];
-        registrarUsuarioOnlineInternet(key);
+        registrarUsuarioOnlineInternet(key, null, null, Date.now());
         openChatRoom(key);
       } else if (target) {
         alert("Chave inválida. A chave precisa ser em formato Hex de 64 caracteres.");
@@ -867,13 +1045,19 @@
 
     function openChatRoom(peer) {
       activeChatTarget = peer;
-      document.getElementById('activeChatTargetName').textContent = peer.substring(0, 12) + '...';
+      atualizarCabecalhoChat(peer);
       document.getElementById('chatRoomOverlay').style.display = 'flex';
       renderChatRoomMessages(peer);
+
+      if (chatStatusRefreshTimer) clearInterval(chatStatusRefreshTimer);
+      chatStatusRefreshTimer = setInterval(() => {
+        if (activeChatTarget) atualizarCabecalhoChat(activeChatTarget);
+      }, 3000);
     }
 
     function closeChatRoom() {
       activeChatTarget = null;
+      if (chatStatusRefreshTimer) clearInterval(chatStatusRefreshTimer);
       document.getElementById('chatRoomOverlay').style.display = 'none';
     }
 
@@ -925,14 +1109,20 @@
       alert("Sua Chave Pública foi copiada com sucesso! Envie para quem for falar com você.");
     }
 
-    function desconectar() {
+    async function desconectar() {
+      await enviarSinalOffline();
+
       if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
+      if (chatStatusRefreshTimer) clearInterval(chatStatusRefreshTimer);
+      if (radarLiveCleanerTimer) clearInterval(radarLiveCleanerTimer);
+
       myPrivKey = null;
       myPubKey = null;
       myCurrentUsername = null;
       activeChatTarget = null;
       onlineInternetUsers.clear();
       bluetoothUsers.clear();
+
       document.getElementById('authUsername').value = '';
       document.getElementById('authPassword').value = '';
       document.getElementById('authScreen').style.display = 'flex';
