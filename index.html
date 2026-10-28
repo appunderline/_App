@@ -280,7 +280,7 @@
           <div style="display: flex; justify-content: center; margin-bottom: 8px;">
             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"/>
-              <polyline points="5 12 12 5 19 12"/>
+              <polyline points="5 12 12 5"/>
             </svg>
           </div>
           <h4 style="font-size: 14px; font-weight: 700; color: #fff;">Enviar Arquivo Direto</h4>
@@ -331,7 +331,7 @@
       <button class="nav-btn" id="btn-arquivos" onclick="switchTab('arquivos')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="19" x2="12" y2="5"/>
-          <polyline points="5 12 12 5" border-radius="2"/>
+          <polyline points="5 12 12 5"/>
         </svg>
         <span>Arquivos</span>
       </button>
@@ -423,26 +423,36 @@
 
     function confirmarCrop() {
       if (!cropperInstance) return;
+      
+      // Gera a imagem em tamanho otimizado para salvar no storage do usuário e propagar na rede
       const canvas = cropperInstance.getCroppedCanvas({
-        width: 320,
-        height: 320,
+        width: 180,
+        height: 180,
         imageSmoothingQuality: 'high'
       });
-      const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+      const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
 
+      // Salva a imagem associando-a à chave do usuário atual
+      if (myPubKey) {
+        localStorage.setItem('_App_avatar_' + myPubKey, croppedDataUrl);
+      }
+
+      // Atualiza visualmente na interface (Perfil, Imagem Expandida e Centro do Radar)
       document.getElementById('profileAvatarImg').src = croppedDataUrl;
       document.getElementById('avatarExpandedImg').src = croppedDataUrl;
       document.getElementById('radarCenterAvatarImg').src = croppedDataUrl;
 
+      // Atualiza no mapa de nós local e propaga na rede
       if (myPubKey && onlineInternetUsers.has(myPubKey)) {
         onlineInternetUsers.get(myPubKey).avatar = croppedDataUrl;
         renderRadarNodes();
       }
 
+      enviarSinalPresencaOnline();
       cancelarCrop();
     }
 
-    // 1. LOGIN DETERMINÍSTICO
+    // 1. LOGIN DETERMINÍSTICO COM RECUPERAÇÃO DO AVATAR SALVO
     async function conectarApp() {
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value;
@@ -461,11 +471,13 @@
       myPrivKey = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
       myPubKey = window.NostrTools.getPublicKey(myPrivKey);
 
-      const initialAvatar = getAvatarUrl(myPubKey);
+      // Recupera a foto salva deste usuário ou usa o padrão gerado
+      const userAvatar = localStorage.getItem('_App_avatar_' + myPubKey) || getAvatarUrl(myPubKey);
+
       document.getElementById('profileUsernameLabel').textContent = u;
       document.getElementById('profilePubkeyDisplay').textContent = myPubKey.substring(0, 10) + '...' + myPubKey.substring(myPubKey.length - 8);
-      document.getElementById('profileAvatarImg').src = initialAvatar;
-      document.getElementById('radarCenterAvatarImg').src = initialAvatar;
+      document.getElementById('profileAvatarImg').src = userAvatar;
+      document.getElementById('radarCenterAvatarImg').src = userAvatar;
       document.getElementById('authScreen').style.display = 'none';
 
       conectarRelaysNostr();
@@ -513,6 +525,7 @@
         }
       });
 
+      // Assinatura de presença com leitura de metadados de avatar
       const subPresence = pool.sub(NOSTR_RELAYS, [
         { kinds: [30315], '#client': [APP_IDENTIFIER], limit: 50 }
       ]);
@@ -522,9 +535,20 @@
           const isAppClient = event.tags.some(t => t[0] === 'client' && t[1] === APP_IDENTIFIER);
           if (!isAppClient) return;
 
-          const nameTag = event.tags.find(t => t[0] === 'name');
-          const name = nameTag ? nameTag[1] : (event.content || event.pubkey.substring(0, 8));
-          registrarUsuarioOnlineInternet(event.pubkey, name);
+          let name = event.pubkey.substring(0, 8);
+          let avatar = null;
+
+          try {
+            const data = JSON.parse(event.content);
+            if (data.name) name = data.name;
+            if (data.avatar) avatar = data.avatar;
+          } catch (e) {
+            const nameTag = event.tags.find(t => t[0] === 'name');
+            if (nameTag) name = nameTag[1];
+            else if (event.content && !event.content.startsWith('{')) name = event.content;
+          }
+
+          registrarUsuarioOnlineInternet(event.pubkey, name, avatar);
         }
       });
 
@@ -533,9 +557,12 @@
       presenceHeartbeatInterval = setInterval(enviarSinalPresencaOnline, 25000);
     }
 
+    // Envia presença incluindo o avatar salvo do usuário
     async function enviarSinalPresencaOnline() {
       if (!myPrivKey || !myPubKey || !pool) return;
       const u = document.getElementById('profileUsernameLabel').textContent || 'peer';
+      const myAvatar = localStorage.getItem('_App_avatar_' + myPubKey) || getAvatarUrl(myPubKey);
+
       const event = {
         kind: 30315,
         pubkey: myPubKey,
@@ -545,7 +572,7 @@
           ['client', APP_IDENTIFIER],
           ['name', u]
         ],
-        content: u
+        content: JSON.stringify({ name: u, avatar: myAvatar })
       };
       event.id = window.NostrTools.getEventHash(event);
       event.sig = window.NostrTools.signEvent(event, myPrivKey);
@@ -554,13 +581,20 @@
       } catch (e) {}
     }
 
-    function registrarUsuarioOnlineInternet(pubkey, name) {
+    function registrarUsuarioOnlineInternet(pubkey, name, avatar) {
       const now = Date.now();
       const existing = onlineInternetUsers.get(pubkey);
+
+      const finalAvatar = avatar || (existing && existing.avatar) || localStorage.getItem('_App_avatar_' + pubkey) || getAvatarUrl(pubkey);
+
+      if (avatar) {
+        localStorage.setItem('_App_avatar_' + pubkey, avatar);
+      }
 
       if (existing) {
         existing.lastSeen = now;
         if (name) existing.name = name;
+        existing.avatar = finalAvatar;
       } else {
         const hashVal = parseInt(pubkey.substring(0, 8), 16) || Math.random() * 1000000;
         const angle = (hashVal % 360) * (Math.PI / 180);
@@ -569,7 +603,7 @@
         onlineInternetUsers.set(pubkey, {
           pubkey,
           name: name || pubkey.substring(0, 8),
-          avatar: getAvatarUrl(pubkey),
+          avatar: finalAvatar,
           lastSeen: now,
           angle,
           radius
@@ -645,7 +679,7 @@
         el.style.top = `${y}px`;
 
         const typeClass = isInternet ? 'internet' : 'bluetooth';
-        const avatarSrc = node.avatar || getAvatarUrl(isInternet ? node.pubkey : node.id);
+        const avatarSrc = node.avatar || localStorage.getItem('_App_avatar_' + (isInternet ? node.pubkey : node.id)) || getAvatarUrl(isInternet ? node.pubkey : node.id);
 
         el.innerHTML = `
           <div class="peer-dot ${typeClass}">
@@ -667,7 +701,7 @@
       });
     }
 
-    // 5. RENDERIZAR LISTA DE CONVERSAS
+    // 5. RENDERIZAR LISTA DE CONVERSAS COM AVATARES PERSISTIDOS
     function renderConversationsList() {
       const container = document.getElementById('conversasList');
       const peers = Object.keys(conversations);
@@ -681,7 +715,7 @@
       peers.forEach(peer => {
         const msgs = conversations[peer];
         const lastMsg = msgs[msgs.length - 1];
-        const avatarSrc = getAvatarUrl(peer);
+        const avatarSrc = localStorage.getItem('_App_avatar_' + peer) || (onlineInternetUsers.has(peer) ? onlineInternetUsers.get(peer).avatar : getAvatarUrl(peer));
         const item = document.createElement('div');
         item.className = 'chat-item';
         item.onclick = () => openChatRoom(peer);
