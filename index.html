@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   
+  <!-- Cropper.js (Estilo e Script para recorte de imagem) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
   <!-- Motor Criptográfico do Nostr via CDN -->
   <script src="https://unpkg.com/nostr-tools@1.17.0/lib/nostr.bundle.js"></script>
 
@@ -20,6 +24,12 @@
     .status-bar { height: 44px; width: 100%; flex-shrink: 0; z-index: 40; }
     .top-header { padding: 6px 24px 10px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 40; min-height: 52px; }
     .app-brand { font-size: 32px; font-weight: 800; letter-spacing: -1px; color: #fff; text-shadow: 0 0 20px rgba(56, 189, 248, 0.45); }
+    
+    /* ÍCONES DO CABEÇALHO À DIREITA */
+    .top-header-icons { display: flex; align-items: center; gap: 16px; }
+    .header-icon-btn { background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; opacity: 0.9; transition: opacity 0.15s, transform 0.15s; }
+    .header-icon-btn:active { opacity: 0.6; transform: scale(0.92); }
+
     .active-tab-title-bar { padding: 2px 24px 14px 24px; display: flex; align-items: center; justify-content: space-between; min-height: 40px; }
     .active-tab-title { font-size: 17px; font-weight: 700; color: #fff; position: relative; padding-bottom: 6px; letter-spacing: -0.2px; }
     .active-tab-title::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2.5px; background: #38bdf8; border-radius: 4px; box-shadow: 0 0 10px #38bdf8; }
@@ -34,23 +44,41 @@
     .chat-list { display: flex; flex-direction: column; gap: 4px; }
     .chat-item { display: flex; align-items: center; gap: 14px; padding: 13px 8px; border-radius: 16px; cursor: pointer; transition: background 0.15s; }
     .chat-item:active { background: var(--bg-card-hover); }
-    .avatar-wrap { width: 52px; height: 52px; border-radius: 50%; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .avatar-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent-blue); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-    .avatar-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #1e293b; }
+
+    /* AVATARES QUADRADOS COM BORDAS ARREDONDADAS */
+    .avatar-wrap { width: 52px; height: 52px; border-radius: 14px; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .avatar-ring { position: absolute; inset: 0; border-radius: 14px; border: 2px solid var(--accent-blue); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+    .avatar-img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; background: #1e293b; display: block; }
+    
     .chat-info { flex: 1; min-width: 0; }
     .chat-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
     .chat-name { font-size: 15px; font-weight: 700; color: #f8fafc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chat-time { font-size: 11px; color: var(--text-muted); font-weight: 500; }
     .chat-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .chat-msg { font-size: 13px; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    
+    /* RADAR E NÓS DO MAPA DE REDE */
     .network-radar-box { background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(3, 7, 18, 0.7) 100%); border: 1px solid var(--border-soft); border-radius: 28px; height: 290px; position: relative; display: flex; align-items: center; justify-content: center; margin-top: 10px; overflow: hidden; }
     .radar-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(56, 189, 248, 0.2); }
     .rc-1 { width: 90px; height: 90px; }
     .rc-2 { width: 170px; height: 170px; }
     .rc-3 { width: 250px; height: 250px; }
-    .radar-pulse-beam { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 1.5px solid var(--accent-blue); animation: pulseRadar 3.2s infinite; }
+    .radar-pulse-beam { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 1.5px solid var(--accent-blue); animation: pulseRadar 3.2s infinite; pointer-events: none; }
     @keyframes pulseRadar { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.2); opacity: 0; } }
-    .center-node { z-index: 10; width: 58px; height: 58px; border-radius: 50%; background: #0284c7; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px #0284c7; }
+    
+    .center-node { z-index: 10; width: 54px; height: 54px; border-radius: 14px; background: #0284c7; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px #0284c7; position: relative; overflow: hidden; padding: 2px; }
+    .center-node-img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
+
+    .radar-nodes-layer { position: absolute; inset: 0; pointer-events: auto; z-index: 20; }
+    .peer-node { position: absolute; transform: translate(-50%, -50%); cursor: pointer; display: flex; flex-direction: column; align-items: center; z-index: 25; transition: transform 0.3s ease; }
+    .peer-node:hover { transform: translate(-50%, -50%) scale(1.15); }
+    
+    .peer-dot { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #fff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.6); overflow: hidden; background: #0a1733; padding: 2px; }
+    .peer-dot.internet { border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.7); }
+    .peer-dot.bluetooth { border-color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.7); }
+    .peer-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; display: block; }
+    .peer-label { font-size: 10px; color: #fff; background: rgba(5, 11, 24, 0.85); padding: 1px 6px; border-radius: 6px; margin-top: 3px; white-space: nowrap; border: 1px solid var(--border-soft); max-width: 75px; overflow: hidden; text-overflow: ellipsis; }
+
     .bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 74px; background: rgba(5, 11, 24, 0.92); backdrop-filter: blur(20px); border-top: 1px solid rgba(56, 189, 248, 0.12); display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 50; }
     .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; background: transparent; border: none; color: #64748b; cursor: pointer; width: 68px; padding: 6px 0; transition: color 0.2s, transform 0.15s; }
     .nav-btn span { font-size: 11px; font-weight: 600; }
@@ -72,11 +100,63 @@
     .bubble-sent { align-self: flex-end; background: #0284c7; color: #fff; border-bottom-right-radius: 4px; }
     .bubble-received { align-self: flex-start; background: var(--bg-card); border: 1px solid var(--border-soft); color: #fff; border-bottom-left-radius: 4px; }
     .chat-room-input-bar { padding: 10px 16px; background: rgba(5, 11, 24, 0.95); border-top: 1px solid var(--border-soft); display: flex; gap: 8px; }
+
+    /* MODAL DE FOTO EXPANDIDA */
+    .avatar-modal-overlay { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(14px); z-index: 110; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 0.2s ease-in-out; }
+    .avatar-modal-content { display: flex; flex-direction: column; align-items: center; gap: 20px; position: relative; }
+    .avatar-expanded-wrap { width: 230px; height: 230px; border-radius: 34px; border: 2.5px solid var(--accent-blue); box-shadow: 0 0 35px rgba(56, 189, 248, 0.45); overflow: hidden; background: #0a1329; display: flex; align-items: center; justify-content: center; }
+    .avatar-expanded-img { width: 100%; height: 100%; object-fit: cover; border-radius: 30px; display: block; }
+    .btn-change-avatar { display: inline-flex; align-items: center; gap: 8px; background: rgba(10, 19, 41, 0.95); border: 1px solid var(--border-soft); color: var(--accent-blue); padding: 11px 22px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 0 16px rgba(56, 189, 248, 0.25); }
+    .btn-change-avatar:active { transform: scale(0.97); background: var(--bg-card-hover); }
+    .btn-close-expanded { position: absolute; top: -45px; right: 0; background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; padding: 6px; }
+
+    /* MODAL DE RECORTE (CROP) */
+    .crop-modal-overlay { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.96); backdrop-filter: blur(16px); z-index: 130; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    .crop-box-container { width: 100%; max-width: 270px; height: 270px; background: #000; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid var(--border-soft); }
+    .crop-modal-actions { display: flex; gap: 10px; width: 100%; max-width: 270px; margin-top: 16px; }
+    .btn-crop-action { flex: 1; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-crop-cancel { background: var(--bg-card); border: 1px solid var(--border-soft); color: #fff; }
+    .btn-crop-confirm { background: linear-gradient(135deg, #0284c7, #2563eb); border: none; color: #fff; box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
   </style>
 </head>
 <body>
 
   <div class="phone-wrapper">
+
+    <!-- ================= MODAL DE RECORTE (CROPPER) ================= -->
+    <div id="cropModalOverlay" class="crop-modal-overlay">
+      <h3 style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 14px;">Ajustar e Recortar Imagem</h3>
+      <div class="crop-box-container">
+        <img id="imageToCrop" src="" style="max-width: 100%; display: block;" alt="Imagem para recorte">
+      </div>
+      <div class="crop-modal-actions">
+        <button class="btn-crop-action btn-crop-cancel" onclick="cancelarCrop()">Cancelar</button>
+        <button class="btn-crop-action btn-crop-confirm" onclick="confirmarCrop()">Recortar e Salvar</button>
+      </div>
+    </div>
+
+    <!-- ================= MODAL DE FOTO EXPANDIDA ================= -->
+    <div id="avatarModalOverlay" class="avatar-modal-overlay" onclick="fecharFotoPerfilExpandida(event)">
+      <div class="avatar-modal-content" onclick="event.stopPropagation()">
+        <button class="btn-close-expanded" onclick="fecharFotoPerfilExpandida()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <div class="avatar-expanded-wrap">
+          <img id="avatarExpandedImg" class="avatar-expanded-img" src="" alt="Foto de perfil expandida">
+        </div>
+
+        <button class="btn-change-avatar" onclick="document.getElementById('avatarFileInput').click()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+          <span>alterar imagem</span>
+        </button>
+
+        <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="handleAvatarChange(event)">
+      </div>
+    </div>
 
     <!-- ================= MODAL DE LOGIN DETERMINÍSTICO ================= -->
     <div id="authScreen" class="auth-overlay">
@@ -104,9 +184,7 @@
         </div>
       </div>
       
-      <div id="chatMessagesContainer" class="chat-room-messages">
-        <!-- Balões de mensagens entram aqui -->
-      </div>
+      <div id="chatMessagesContainer" class="chat-room-messages"></div>
 
       <div class="chat-room-input-bar">
         <input type="text" id="chatMessageInput" class="input-field" style="margin-bottom: 0;" placeholder="Mensagem segura...">
@@ -114,11 +192,24 @@
       </div>
     </div>
 
-    <!-- Status Bar & Header -->
+    <!-- Status Bar & Header com ícones: Pesquisa e (+) -->
     <div class="status-bar"></div>
     <header class="top-header">
       <h1 class="app-brand">_App</h1>
-      <button onclick="desconectar()" style="background: none; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer;">Sair</button>
+      <div class="top-header-icons">
+        <button class="header-icon-btn" aria-label="Pesquisa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <button class="header-icon-btn" onclick="iniciarNovaConversaPrompt()" aria-label="Nova Conversa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
     </header>
 
     <!-- Subheader com Título e Pílulas -->
@@ -136,20 +227,25 @@
       <!-- ================= ABA 1: CONVERSAS ================= -->
       <section id="tab-conversas" class="tab-page active">
         <button onclick="iniciarNovaConversaPrompt()" class="btn-primary" style="margin-bottom: 14px; font-size: 12px; padding: 10px;">
-          + Nova Conversa P2P
+          + Nova Conversa
         </button>
 
         <div class="chat-list" id="conversasList">
           <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 20px;">
-            Aguardando mensagens dos Relays...
+            Aguardando mensagens...
           </p>
         </div>
       </section>
 
       <!-- ================= ABA 2: REDE ================= -->
       <section id="tab-rede" class="tab-page">
-        <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 8px;">
-          Nós e Relays conectados:
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span id="redeTitleStatus" style="font-size: 13px; color: var(--text-sub);">
+            Usuários _App na Internet:
+          </span>
+          <span id="nodesCountBadge" style="font-size: 11px; color: var(--accent-blue); font-weight: 700;">
+            0 localizados
+          </span>
         </div>
 
         <div class="network-radar-box">
@@ -158,24 +254,22 @@
           <div class="radar-circle rc-3"></div>
           <div class="radar-pulse-beam"></div>
 
+          <!-- Nós com avatares dos usuários do _App -->
+          <div id="radarNodesLayer" class="radar-nodes-layer"></div>
+
+          <!-- NÓ CENTRAL: FOTO DE PERFIL DO PRÓPRIO USUÁRIO -->
           <div class="center-node">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
-              <rect x="5" y="2" width="14" height="20" rx="3"/>
-              <line x1="12" y1="18" x2="12.01" y2="18"/>
-            </svg>
+            <img id="radarCenterAvatarImg" class="center-node-img" src="https://api.dicebear.com/7.x/identicon/svg?seed=user" alt="Meu Avatar">
           </div>
         </div>
 
-        <div style="margin-top: 20px; background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: 18px; padding: 16px;">
+        <div style="margin-top: 14px; background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: 18px; padding: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 13px; font-weight: 600;">Status da Rede:</span>
+            <span style="font-size: 13px; font-weight: 600;">Canal Ativo:</span>
             <span id="redeStatusBadge" style="font-size: 11px; color: #38bdf8; font-weight: 700; background: rgba(56, 189, 248, 0.15); padding: 3px 8px; border-radius: 6px;">
               ● CONECTANDO...
             </span>
           </div>
-          <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
-            Sua conexão é roteada dinamicamente pelos relays do protocolo Nostr. Zero dados armazenados em servidores.
-          </p>
         </div>
       </section>
 
@@ -183,7 +277,12 @@
       <section id="tab-arquivos" class="tab-page">
         <input type="file" id="realFileInput" style="display: none;" onchange="handleFileDrop(event)" multiple>
         <div class="file-drop-area" onclick="document.getElementById('realFileInput').click()" style="border: 2px dashed rgba(56, 189, 248, 0.35); border-radius: 22px; background: rgba(10, 19, 41, 0.5); padding: 30px 20px; text-align: center; cursor: pointer;">
-          <div style="font-size: 32px; margin-bottom: 8px;">📁</div>
+          <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"/>
+              <polyline points="5 12 12 5 19 12"/>
+            </svg>
+          </div>
           <h4 style="font-size: 14px; font-weight: 700; color: #fff;">Enviar Arquivo Direto</h4>
           <p style="font-size: 11px; color: var(--text-sub); margin-top: 4px;">P2P Instantâneo</p>
         </div>
@@ -193,9 +292,9 @@
       <!-- ================= ABA 4: PERFIL ================= -->
       <section id="tab-perfil" class="tab-page">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 10px;">
-          <div class="avatar-wrap" style="width: 76px; height: 76px;">
-            <div class="avatar-ring" style="border-width: 2.5px;"></div>
-            <div style="width: 66px; height: 66px; border-radius: 50%; background: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 26px;">⚡</div>
+          <div class="avatar-wrap" style="width: 76px; height: 76px; border-radius: 20px; cursor: pointer;" onclick="abrirFotoPerfilExpandida()">
+            <div class="avatar-ring" style="border-width: 2.5px; border-radius: 20px;"></div>
+            <img id="profileAvatarImg" src="https://api.dicebear.com/7.x/identicon/svg?seed=user" style="width: 66px; height: 66px; border-radius: 16px; object-fit: cover; background: #0284c7;" alt="Meu Avatar">
           </div>
           <h3 id="profileUsernameLabel" style="font-size: 17px; font-weight: 700; margin-top: 12px; color: #fff;">Usuário</h3>
           <span style="font-size: 12px; color: var(--accent-blue);">Modo Descentralizado Ativo</span>
@@ -230,7 +329,10 @@
         <span>Rede</span>
       </button>
       <button class="nav-btn" id="btn-arquivos" onclick="switchTab('arquivos')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"/>
+          <polyline points="5 12 12 5" border-radius="2"/>
+        </svg>
         <span>Arquivos</span>
       </button>
       <button class="nav-btn" id="btn-perfil" onclick="switchTab('perfil')">
@@ -242,20 +344,105 @@
 
   <!-- ================= LÓGICA NOSTR & P2P ================= -->
   <script>
+    const APP_IDENTIFIER = '_App';
+
     let myPrivKey = null;
     let myPubKey = null;
     let pool = null;
     let activeChatTarget = null;
-    const conversations = {}; // Memória temporária da sessão
+    const conversations = {};
 
-    // Relays públicos mundiais gratuitos (sustentam a rede 24/7)
+    let currentRedeMode = 'internet';
+    const onlineInternetUsers = new Map();
+    const bluetoothUsers = new Map();
+    let presenceHeartbeatInterval = null;
+    let cropperInstance = null;
+
     const NOSTR_RELAYS = [
       'wss://relay.damus.io',
       'wss://nos.lol',
       'wss://relay.nostr.band'
     ];
 
-    // 1. LOGIN DETERMINÍSTICO (Sem servidor, direto na memória)
+    function getAvatarUrl(seed) {
+      return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(seed || 'anon')}`;
+    }
+
+    // EXPANSÃO DA FOTO DE PERFIL
+    function abrirFotoPerfilExpandida() {
+      const src = document.getElementById('profileAvatarImg').src;
+      document.getElementById('avatarExpandedImg').src = src;
+      document.getElementById('avatarModalOverlay').style.display = 'flex';
+    }
+
+    function fecharFotoPerfilExpandida(e) {
+      if (e && e.target !== e.currentTarget && !e.currentTarget.classList.contains('btn-close-expanded')) return;
+      document.getElementById('avatarModalOverlay').style.display = 'none';
+    }
+
+    // INÍCIO DO PROCESSO DE CROP
+    function handleAvatarChange(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const cropImg = document.getElementById('imageToCrop');
+        cropImg.src = evt.target.result;
+        document.getElementById('cropModalOverlay').style.display = 'flex';
+
+        if (cropperInstance) {
+          cropperInstance.destroy();
+        }
+
+        cropperInstance = new Cropper(cropImg, {
+          aspectRatio: 1,
+          viewMode: 1,
+          dragMode: 'move',
+          autoCropArea: 1,
+          restore: false,
+          guides: true,
+          center: true,
+          highlight: false,
+          cropBoxMovable: true,
+          cropBoxResizable: true,
+          toggleDragModeOnDblclick: false
+        });
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+
+    function cancelarCrop() {
+      if (cropperInstance) {
+        cropperInstance.destroy();
+        cropperInstance = null;
+      }
+      document.getElementById('cropModalOverlay').style.display = 'none';
+    }
+
+    function confirmarCrop() {
+      if (!cropperInstance) return;
+      const canvas = cropperInstance.getCroppedCanvas({
+        width: 320,
+        height: 320,
+        imageSmoothingQuality: 'high'
+      });
+      const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+      document.getElementById('profileAvatarImg').src = croppedDataUrl;
+      document.getElementById('avatarExpandedImg').src = croppedDataUrl;
+      document.getElementById('radarCenterAvatarImg').src = croppedDataUrl;
+
+      if (myPubKey && onlineInternetUsers.has(myPubKey)) {
+        onlineInternetUsers.get(myPubKey).avatar = croppedDataUrl;
+        renderRadarNodes();
+      }
+
+      cancelarCrop();
+    }
+
+    // 1. LOGIN DETERMINÍSTICO
     async function conectarApp() {
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value;
@@ -266,7 +453,6 @@
         "raw", enc.encode(p), { name: "PBKDF2" }, false, ["deriveBits"]
       );
 
-      // Deriva uma chave privada usando o usuário como salt
       const keyBits = await crypto.subtle.deriveBits(
         { name: "PBKDF2", salt: enc.encode("nostr_salt_" + u.toLowerCase()), iterations: 100000, hash: "SHA-256" },
         passKey, 256
@@ -275,34 +461,36 @@
       myPrivKey = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
       myPubKey = window.NostrTools.getPublicKey(myPrivKey);
 
-      // Atualiza a tela de perfil
+      const initialAvatar = getAvatarUrl(myPubKey);
       document.getElementById('profileUsernameLabel').textContent = u;
       document.getElementById('profilePubkeyDisplay').textContent = myPubKey.substring(0, 10) + '...' + myPubKey.substring(myPubKey.length - 8);
+      document.getElementById('profileAvatarImg').src = initialAvatar;
+      document.getElementById('radarCenterAvatarImg').src = initialAvatar;
       document.getElementById('authScreen').style.display = 'none';
 
       conectarRelaysNostr();
     }
 
-    // 2. CONEXÃO COM OS RELAYS
+    // 2. CONEXÃO COM OS RELAYS E FILTRAGEM DO _APP
     function conectarRelaysNostr() {
       pool = new window.NostrTools.SimplePool();
       document.getElementById('redeStatusBadge').textContent = '● CONECTADO AOS RELAYS';
 
-      // Ouve mensagens criptografadas (kind 4) destinadas à minha chave
-      const sub = pool.sub(NOSTR_RELAYS, [
+      const subMessages = pool.sub(NOSTR_RELAYS, [
         { kinds: [4], '#p': [myPubKey] },
         { kinds: [4], authors: [myPubKey] }
       ]);
 
-      sub.on('event', async (event) => {
+      subMessages.on('event', async (event) => {
         try {
           const isSentByMe = event.pubkey === myPubKey;
           const otherUser = isSentByMe ? event.tags.find(t => t[0] === 'p')[1] : event.pubkey;
+          const isAppClient = event.tags.some(t => t[0] === 'client' && t[1] === APP_IDENTIFIER);
+
           const text = await window.NostrTools.nip04.decrypt(myPrivKey, otherUser, event.content);
 
           if (!conversations[otherUser]) conversations[otherUser] = [];
           
-          // Evita duplicatas de mensagens
           if (!conversations[otherUser].some(m => m.id === event.id)) {
             conversations[otherUser].push({
               id: event.id,
@@ -312,24 +500,180 @@
             });
             renderConversationsList();
 
-            // Se o chat com essa pessoa estiver aberto na tela, atualiza as mensagens
             if (activeChatTarget === otherUser) {
               renderChatRoomMessages(otherUser);
             }
+          }
+
+          if (!isSentByMe && isAppClient) {
+            registrarUsuarioOnlineInternet(otherUser);
           }
         } catch (err) {
           console.error("Falha ao descriptografar:", err);
         }
       });
+
+      const subPresence = pool.sub(NOSTR_RELAYS, [
+        { kinds: [30315], '#client': [APP_IDENTIFIER], limit: 50 }
+      ]);
+
+      subPresence.on('event', (event) => {
+        if (event.pubkey !== myPubKey) {
+          const isAppClient = event.tags.some(t => t[0] === 'client' && t[1] === APP_IDENTIFIER);
+          if (!isAppClient) return;
+
+          const nameTag = event.tags.find(t => t[0] === 'name');
+          const name = nameTag ? nameTag[1] : (event.content || event.pubkey.substring(0, 8));
+          registrarUsuarioOnlineInternet(event.pubkey, name);
+        }
+      });
+
+      enviarSinalPresencaOnline();
+      if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
+      presenceHeartbeatInterval = setInterval(enviarSinalPresencaOnline, 25000);
     }
 
-    // 3. RENDERIZAR LISTA DE CONVERSAS
+    async function enviarSinalPresencaOnline() {
+      if (!myPrivKey || !myPubKey || !pool) return;
+      const u = document.getElementById('profileUsernameLabel').textContent || 'peer';
+      const event = {
+        kind: 30315,
+        pubkey: myPubKey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [
+          ['d', '_App_presence'],
+          ['client', APP_IDENTIFIER],
+          ['name', u]
+        ],
+        content: u
+      };
+      event.id = window.NostrTools.getEventHash(event);
+      event.sig = window.NostrTools.signEvent(event, myPrivKey);
+      try {
+        await Promise.all(pool.publish(NOSTR_RELAYS, event));
+      } catch (e) {}
+    }
+
+    function registrarUsuarioOnlineInternet(pubkey, name) {
+      const now = Date.now();
+      const existing = onlineInternetUsers.get(pubkey);
+
+      if (existing) {
+        existing.lastSeen = now;
+        if (name) existing.name = name;
+      } else {
+        const hashVal = parseInt(pubkey.substring(0, 8), 16) || Math.random() * 1000000;
+        const angle = (hashVal % 360) * (Math.PI / 180);
+        const radius = 55 + (hashVal % 65);
+
+        onlineInternetUsers.set(pubkey, {
+          pubkey,
+          name: name || pubkey.substring(0, 8),
+          avatar: getAvatarUrl(pubkey),
+          lastSeen: now,
+          angle,
+          radius
+        });
+      }
+
+      if (currentRedeMode === 'internet') {
+        renderRadarNodes();
+      }
+    }
+
+    // 3. SELEÇÃO DE MODO
+    function selectRedeMode(mode) {
+      currentRedeMode = mode;
+      const btnInternet = document.getElementById('pillInternet');
+      const btnBluetooth = document.getElementById('pillBluetooth');
+      const redeTitle = document.getElementById('redeTitleStatus');
+      const redeBadge = document.getElementById('redeStatusBadge');
+
+      if (mode === 'internet') {
+        btnInternet.classList.add('active');
+        btnBluetooth.classList.remove('active');
+        redeTitle.textContent = 'Usuários _App na Internet:';
+        redeBadge.textContent = '● CONECTADO AOS RELAYS';
+        redeBadge.style.color = '#38bdf8';
+        redeBadge.style.background = 'rgba(56, 189, 248, 0.15)';
+      } else {
+        btnBluetooth.classList.add('active');
+        btnInternet.classList.remove('active');
+        redeTitle.textContent = 'Usuários _App no Bluetooth:';
+        redeBadge.textContent = '● CANAL BLUETOOTH';
+        redeBadge.style.color = '#10b981';
+        redeBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+      }
+
+      renderRadarNodes();
+    }
+
+    // 4. RENDERIZAR NÓS NO RADAR
+    function renderRadarNodes() {
+      const layer = document.getElementById('radarNodesLayer');
+      layer.innerHTML = '';
+      const badge = document.getElementById('nodesCountBadge');
+
+      const isInternet = (currentRedeMode === 'internet');
+      const nodesMap = isInternet ? onlineInternetUsers : bluetoothUsers;
+      
+      const activeList = [];
+      const now = Date.now();
+
+      nodesMap.forEach((user) => {
+        if (isInternet) {
+          if (now - user.lastSeen < 90000) {
+            activeList.push(user);
+          }
+        } else {
+          activeList.push(user);
+        }
+      });
+
+      badge.textContent = `${activeList.length} localizado${activeList.length === 1 ? '' : 's'}`;
+
+      const centerX = 145;
+      const centerY = 145;
+
+      activeList.forEach((node) => {
+        const x = centerX + Math.cos(node.angle) * node.radius;
+        const y = centerY + Math.sin(node.angle) * node.radius;
+
+        const el = document.createElement('div');
+        el.className = 'peer-node';
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+
+        const typeClass = isInternet ? 'internet' : 'bluetooth';
+        const avatarSrc = node.avatar || getAvatarUrl(isInternet ? node.pubkey : node.id);
+
+        el.innerHTML = `
+          <div class="peer-dot ${typeClass}">
+            <img src="${avatarSrc}" class="peer-avatar-img" alt="${node.name}">
+          </div>
+          <span class="peer-label">${node.name}</span>
+        `;
+
+        el.onclick = () => {
+          if (isInternet) {
+            if (!conversations[node.pubkey]) conversations[node.pubkey] = [];
+            openChatRoom(node.pubkey);
+          } else {
+            alert(`Usuário _App (Bluetooth): ${node.name}\nID: ${node.id}`);
+          }
+        };
+
+        layer.appendChild(el);
+      });
+    }
+
+    // 5. RENDERIZAR LISTA DE CONVERSAS
     function renderConversationsList() {
       const container = document.getElementById('conversasList');
       const peers = Object.keys(conversations);
 
       if (peers.length === 0) {
-        container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 20px;">Nenhuma conversa ainda. Clique em "+ Nova Conversa P2P" acima.</p>`;
+        container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 20px;">Nenhuma conversa ainda. Clique em "+ Nova Conversa" acima.</p>`;
         return;
       }
 
@@ -337,21 +681,22 @@
       peers.forEach(peer => {
         const msgs = conversations[peer];
         const lastMsg = msgs[msgs.length - 1];
+        const avatarSrc = getAvatarUrl(peer);
         const item = document.createElement('div');
         item.className = 'chat-item';
         item.onclick = () => openChatRoom(peer);
         item.innerHTML = `
           <div class="avatar-wrap">
             <div class="avatar-ring"></div>
-            <div class="avatar-img" style="display:flex;align-items:center;justify-content:center;background:#0a1733;font-size:18px;">👤</div>
+            <img src="${avatarSrc}" class="avatar-img" alt="Avatar">
           </div>
           <div class="chat-info">
             <div class="chat-header">
               <span class="chat-name">${peer.substring(0, 10)}...</span>
-              <span class="chat-time">${lastMsg.time}</span>
+              <span class="chat-time">${lastMsg ? lastMsg.time : ''}</span>
             </div>
             <div class="chat-footer">
-              <span class="chat-msg">${lastMsg.text}</span>
+              <span class="chat-msg">${lastMsg ? lastMsg.text : 'Sem mensagens'}</span>
             </div>
           </div>
         `;
@@ -359,12 +704,14 @@
       });
     }
 
-    // 4. NOVA CONVERSA & CHAT ROOM
+    // 6. NOVA CONVERSA & CHAT ROOM
     function iniciarNovaConversaPrompt() {
       const target = prompt("Cole a Chave Pública Nostr do seu amigo (formato Hex):");
       if (target && target.trim().length === 64) {
-        if (!conversations[target.trim()]) conversations[target.trim()] = [];
-        openChatRoom(target.trim());
+        const key = target.trim();
+        if (!conversations[key]) conversations[key] = [];
+        registrarUsuarioOnlineInternet(key);
+        openChatRoom(key);
       } else if (target) {
         alert("Chave inválida. A chave precisa ser em formato Hex de 64 caracteres.");
       }
@@ -394,7 +741,7 @@
       box.scrollTop = box.scrollHeight;
     }
 
-    // 5. ENVIAR MENSAGEM NOSTR
+    // 7. ENVIAR MENSAGEM NOSTR
     async function enviarMensagemNostr() {
       const input = document.getElementById('chatMessageInput');
       const text = input.value.trim();
@@ -405,7 +752,10 @@
         kind: 4,
         pubkey: myPubKey,
         created_at: Math.floor(Date.now() / 1000),
-        tags: [['p', activeChatTarget]],
+        tags: [
+          ['p', activeChatTarget],
+          ['client', APP_IDENTIFIER]
+        ],
         content: ciphertext
       };
 
@@ -423,16 +773,20 @@
     }
 
     function desconectar() {
+      if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
       myPrivKey = null;
       myPubKey = null;
       activeChatTarget = null;
+      onlineInternetUsers.clear();
+      bluetoothUsers.clear();
       document.getElementById('authUsername').value = '';
       document.getElementById('authPassword').value = '';
       document.getElementById('authScreen').style.display = 'flex';
       closeChatRoom();
+      renderRadarNodes();
     }
 
-    // 6. NAVEGAÇÃO ENTRE AS ABAS DA INTERFACE
+    // 8. NAVEGAÇÃO ENTRE ABAS
     const tabTitles = { 'conversas': 'Conversas', 'rede': 'Rede', 'arquivos': 'Arquivos', 'perfil': 'Perfil' };
     function switchTab(tabKey) {
       document.getElementById('pageHeaderTitle').textContent = tabTitles[tabKey];
@@ -443,17 +797,9 @@
       document.getElementById('btn-' + tabKey).classList.add('active');
 
       document.getElementById('headerRedeActions').style.display = (tabKey === 'rede') ? 'inline-flex' : 'none';
-    }
 
-    function selectRedeMode(mode) {
-      const btnInternet = document.getElementById('pillInternet');
-      const btnBluetooth = document.getElementById('pillBluetooth');
-      if (mode === 'internet') {
-        btnInternet.classList.add('active');
-        btnBluetooth.classList.remove('active');
-      } else {
-        btnBluetooth.classList.add('active');
-        btnInternet.classList.remove('active');
+      if (tabKey === 'rede') {
+        renderRadarNodes();
       }
     }
 
