@@ -8,15 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   
-  <!-- Cropper.js (Estilo e Script para recorte de imagem) -->
+  <!-- Cropper.js (Recorte de imagem) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
-  <!-- Motor Criptográfico do Nostr via CDN -->
+  <!-- Nostr Tools CDN -->
   <script src="https://unpkg.com/nostr-tools@1.17.0/lib/nostr.bundle.js"></script>
 
   <style>
-    :root { --bg-space: #030712; --bg-phone: #050b18; --bg-card: #0a1329; --bg-card-hover: #101c3d; --accent-blue: #38bdf8; --accent-glow: #0284c7; --accent-indigo: #6366f1; --text-white: #f8fafc; --text-muted: #64748b; --text-sub: #94a3b8; --border-soft: rgba(56, 189, 248, 0.12); --badge-blue: #2563eb; }
+    :root { --bg-space: #030712; --bg-phone: #050b18; --bg-card: #0a1329; --bg-card-hover: #101c3d; --accent-blue: #38bdf8; --accent-glow: #0284c7; --accent-indigo: #6366f1; --text-white: #f8fafc; --text-muted: #64748b; --text-sub: #94a3b8; --border-soft: rgba(56, 189, 248, 0.12); }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-space); color: var(--text-white); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; overflow-x: hidden; }
     .phone-wrapper { width: 100%; max-width: 410px; height: 844px; max-height: 94vh; background: radial-gradient(circle at 50% 0%, #0a1733 0%, var(--bg-phone) 65%); border-radius: 46px; border: 2px solid rgba(56, 189, 248, 0.25); box-shadow: 0 0 50px rgba(14, 165, 233, 0.15), 0 25px 60px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; position: relative; overflow: hidden; }
@@ -24,8 +24,6 @@
     .status-bar { height: 44px; width: 100%; flex-shrink: 0; z-index: 40; }
     .top-header { padding: 6px 24px 10px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 40; min-height: 52px; }
     .app-brand { font-size: 32px; font-weight: 800; letter-spacing: -1px; color: #fff; text-shadow: 0 0 20px rgba(56, 189, 248, 0.45); }
-    
-    /* ÍCONES DO CABEÇALHO À DIREITA */
     .top-header-icons { display: flex; align-items: center; gap: 16px; }
     .header-icon-btn { background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; opacity: 0.9; transition: opacity 0.15s, transform 0.15s; }
     .header-icon-btn:active { opacity: 0.6; transform: scale(0.92); }
@@ -41,6 +39,7 @@
     .tab-page { display: none; flex-direction: column; animation: fadeIn 0.2s ease-in-out; }
     .tab-page.active { display: flex; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
     .chat-list { display: flex; flex-direction: column; gap: 4px; }
     .chat-item { display: flex; align-items: center; gap: 14px; padding: 13px 8px; border-radius: 16px; cursor: pointer; transition: background 0.15s; }
     .chat-item:active { background: var(--bg-card-hover); }
@@ -56,8 +55,8 @@
     .chat-time { font-size: 11px; color: var(--text-muted); font-weight: 500; }
     .chat-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .chat-msg { font-size: 13px; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    
-    /* RADAR E NÓS DO MAPA DE REDE */
+
+    /* RADAR E NÓS DA REDE */
     .network-radar-box { background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(3, 7, 18, 0.7) 100%); border: 1px solid var(--border-soft); border-radius: 28px; height: 290px; position: relative; display: flex; align-items: center; justify-content: center; margin-top: 10px; overflow: hidden; }
     .radar-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(56, 189, 248, 0.2); }
     .rc-1 { width: 90px; height: 90px; }
@@ -65,14 +64,12 @@
     .rc-3 { width: 250px; height: 250px; }
     .radar-pulse-beam { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 1.5px solid var(--accent-blue); animation: pulseRadar 3.2s infinite; pointer-events: none; }
     @keyframes pulseRadar { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.2); opacity: 0; } }
-    
+
     .center-node { z-index: 10; width: 54px; height: 54px; border-radius: 14px; background: #0284c7; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px #0284c7; position: relative; overflow: hidden; padding: 2px; }
     .center-node-img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
-
     .radar-nodes-layer { position: absolute; inset: 0; pointer-events: auto; z-index: 20; }
     .peer-node { position: absolute; transform: translate(-50%, -50%); cursor: pointer; display: flex; flex-direction: column; align-items: center; z-index: 25; transition: transform 0.3s ease; }
     .peer-node:hover { transform: translate(-50%, -50%) scale(1.15); }
-    
     .peer-dot { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #fff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.6); overflow: hidden; background: #0a1733; padding: 2px; }
     .peer-dot.internet { border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.7); }
     .peer-dot.bluetooth { border-color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.7); }
@@ -85,7 +82,7 @@
     .nav-btn.active { color: var(--accent-blue); }
     .nav-btn.active svg { filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7)); }
 
-    /* ESTILOS DA TELA DE LOGIN & CHAT ROOM P2P */
+    /* TELAS DE LOGIN & CHAT ROOM */
     .auth-overlay { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; padding: 32px 24px; }
     .auth-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 8px; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
     .auth-desc { font-size: 12px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.5; }
@@ -110,7 +107,7 @@
     .btn-change-avatar:active { transform: scale(0.97); background: var(--bg-card-hover); }
     .btn-close-expanded { position: absolute; top: -45px; right: 0; background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; padding: 6px; }
 
-    /* MODAL DE RECORTE (CROP) */
+    /* MODAL DE RECORTE */
     .crop-modal-overlay { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.96); backdrop-filter: blur(16px); z-index: 130; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
     .crop-box-container { width: 100%; max-width: 270px; height: 270px; background: #000; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid var(--border-soft); }
     .crop-modal-actions { display: flex; gap: 10px; width: 100%; max-width: 270px; margin-top: 16px; }
@@ -123,7 +120,7 @@
 
   <div class="phone-wrapper">
 
-    <!-- ================= MODAL DE RECORTE (CROPPER) ================= -->
+    <!-- RECORTE DE IMAGEM -->
     <div id="cropModalOverlay" class="crop-modal-overlay">
       <h3 style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 14px;">Ajustar e Recortar Imagem</h3>
       <div class="crop-box-container">
@@ -135,7 +132,7 @@
       </div>
     </div>
 
-    <!-- ================= MODAL DE FOTO EXPANDIDA ================= -->
+    <!-- FOTO EXPANDIDA -->
     <div id="avatarModalOverlay" class="avatar-modal-overlay" onclick="fecharFotoPerfilExpandida(event)">
       <div class="avatar-modal-content" onclick="event.stopPropagation()">
         <button class="btn-close-expanded" onclick="fecharFotoPerfilExpandida()">
@@ -143,7 +140,7 @@
         </button>
 
         <div class="avatar-expanded-wrap">
-          <img id="avatarExpandedImg" class="avatar-expanded-img" src="" alt="Foto de perfil expandida">
+          <img id="avatarExpandedImg" class="avatar-expanded-img" src="" alt="Foto expandida">
         </div>
 
         <button class="btn-change-avatar" onclick="document.getElementById('avatarFileInput').click()">
@@ -158,21 +155,21 @@
       </div>
     </div>
 
-    <!-- ================= MODAL DE LOGIN DETERMINÍSTICO ================= -->
+    <!-- TELA DE LOGIN -->
     <div id="authScreen" class="auth-overlay">
       <h2 class="auth-title">Acesso Seguro</h2>
-      <p class="auth-desc">Digite seu usuário e senha. Suas chaves de comunicação são criadas na memória agora e nada fica gravado em servidor.</p>
+      <p class="auth-desc">Digite seu nome de usuário único e sua senha. Suas chaves de comunicação são criadas na memória agora.</p>
       
-      <input type="text" id="authUsername" class="input-field" placeholder="Nome de Usuário (Ex: satoshi)">
+      <input type="text" id="authUsername" class="input-field" placeholder="Nome de Usuário Único (Ex: satoshi)">
       <input type="password" id="authPassword" class="input-field" placeholder="Senha Forte">
       
-      <button class="btn-primary" onclick="conectarApp()">Acessar Rede P2P</button>
+      <button id="btnConectarSubmit" class="btn-primary" onclick="conectarApp()">Acessar Rede P2P</button>
       <span style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px;">
-        🔒 Criptografia ponta a ponta nativa via Nostr
+        🔒 Nome único garantido criptograficamente via Nostr
       </span>
     </div>
 
-    <!-- ================= JANELA DO CHAT ATIVO (P2P ROOM) ================= -->
+    <!-- SALA DE CHAT P2P -->
     <div id="chatRoomOverlay" class="chat-room-overlay">
       <div class="chat-room-header">
         <button onclick="closeChatRoom()" style="background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center;">
@@ -192,7 +189,7 @@
       </div>
     </div>
 
-    <!-- Status Bar & Header com ícones: Pesquisa e (+) -->
+    <!-- CABEÇALHO COM ÍCONES -->
     <div class="status-bar"></div>
     <header class="top-header">
       <h1 class="app-brand">_App</h1>
@@ -212,7 +209,7 @@
       </div>
     </header>
 
-    <!-- Subheader com Título e Pílulas -->
+    <!-- SUBHEADER -->
     <div class="active-tab-title-bar">
       <span class="active-tab-title" id="pageHeaderTitle">Conversas</span>
       <div class="pill-switch-group" id="headerRedeActions">
@@ -224,7 +221,7 @@
     <!-- CONTEÚDO PRINCIPAL (4 ABAS) -->
     <main class="screen-content">
 
-      <!-- ================= ABA 1: CONVERSAS ================= -->
+      <!-- ABA 1: CONVERSAS -->
       <section id="tab-conversas" class="tab-page active">
         <button onclick="iniciarNovaConversaPrompt()" class="btn-primary" style="margin-bottom: 14px; font-size: 12px; padding: 10px;">
           + Nova Conversa
@@ -237,7 +234,7 @@
         </div>
       </section>
 
-      <!-- ================= ABA 2: REDE ================= -->
+      <!-- ABA 2: REDE -->
       <section id="tab-rede" class="tab-page">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span id="redeTitleStatus" style="font-size: 13px; color: var(--text-sub);">
@@ -254,10 +251,10 @@
           <div class="radar-circle rc-3"></div>
           <div class="radar-pulse-beam"></div>
 
-          <!-- Nós com avatares dos usuários do _App -->
+          <!-- NÓS DOS USUÁRIOS -->
           <div id="radarNodesLayer" class="radar-nodes-layer"></div>
 
-          <!-- NÓ CENTRAL: FOTO DE PERFIL DO PRÓPRIO USUÁRIO -->
+          <!-- NÓ CENTRAL (FOTO DE PERFIL DO PRÓPRIO USUÁRIO) -->
           <div class="center-node">
             <img id="radarCenterAvatarImg" class="center-node-img" src="https://api.dicebear.com/7.x/identicon/svg?seed=user" alt="Meu Avatar">
           </div>
@@ -273,7 +270,7 @@
         </div>
       </section>
 
-      <!-- ================= ABA 3: ARQUIVOS ================= -->
+      <!-- ABA 3: ARQUIVOS -->
       <section id="tab-arquivos" class="tab-page">
         <input type="file" id="realFileInput" style="display: none;" onchange="handleFileDrop(event)" multiple>
         <div class="file-drop-area" onclick="document.getElementById('realFileInput').click()" style="border: 2px dashed rgba(56, 189, 248, 0.35); border-radius: 22px; background: rgba(10, 19, 41, 0.5); padding: 30px 20px; text-align: center; cursor: pointer;">
@@ -289,7 +286,7 @@
         <div id="fileQueue" style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;"></div>
       </section>
 
-      <!-- ================= ABA 4: PERFIL ================= -->
+      <!-- ABA 4: PERFIL -->
       <section id="tab-perfil" class="tab-page">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 10px;">
           <div class="avatar-wrap" style="width: 76px; height: 76px; border-radius: 20px; cursor: pointer;" onclick="abrirFotoPerfilExpandida()">
@@ -297,7 +294,7 @@
             <img id="profileAvatarImg" src="https://api.dicebear.com/7.x/identicon/svg?seed=user" style="width: 66px; height: 66px; border-radius: 16px; object-fit: cover; background: #0284c7;" alt="Meu Avatar">
           </div>
           <h3 id="profileUsernameLabel" style="font-size: 17px; font-weight: 700; margin-top: 12px; color: #fff;">Usuário</h3>
-          <span style="font-size: 12px; color: var(--accent-blue);">Modo Descentralizado Ativo</span>
+          <span style="font-size: 12px; color: var(--accent-blue);">Nome Exclusivo e Registrado</span>
         </div>
 
         <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
@@ -318,7 +315,7 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- BARRA DE NAVEGAÇÃO -->
     <nav class="bottom-bar">
       <button class="nav-btn active" id="btn-conversas" onclick="switchTab('conversas')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="15" rx="4"/><path d="M9 10l3 3 3-3"/></svg>
@@ -348,6 +345,7 @@
 
     let myPrivKey = null;
     let myPubKey = null;
+    let myCurrentUsername = null;
     let pool = null;
     let activeChatTarget = null;
     const conversations = {};
@@ -358,10 +356,13 @@
     let presenceHeartbeatInterval = null;
     let cropperInstance = null;
 
+    // Relays públicos de alta performance
     const NOSTR_RELAYS = [
       'wss://relay.damus.io',
       'wss://nos.lol',
-      'wss://relay.nostr.band'
+      'wss://nostr.mom',
+      'wss://relay.nostr.band',
+      'wss://offchain.pub'
     ];
 
     function getAvatarUrl(seed) {
@@ -380,7 +381,7 @@
       document.getElementById('avatarModalOverlay').style.display = 'none';
     }
 
-    // INÍCIO DO PROCESSO DE CROP
+    // CROPPER
     function handleAvatarChange(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -424,27 +425,31 @@
     function confirmarCrop() {
       if (!cropperInstance) return;
       
-      // Gera a imagem em tamanho otimizado para salvar no storage do usuário e propagar na rede
-      const canvas = cropperInstance.getCroppedCanvas({
-        width: 180,
-        height: 180,
+      const canvasLocal = cropperInstance.getCroppedCanvas({
+        width: 220,
+        height: 220,
         imageSmoothingQuality: 'high'
       });
-      const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      const localDataUrl = canvasLocal.toDataURL('image/jpeg', 0.85);
 
-      // Salva a imagem associando-a à chave do usuário atual
+      const canvasNet = cropperInstance.getCroppedCanvas({
+        width: 70,
+        height: 70,
+        imageSmoothingQuality: 'medium'
+      });
+      const netDataUrl = canvasNet.toDataURL('image/jpeg', 0.6);
+
       if (myPubKey) {
-        localStorage.setItem('_App_avatar_' + myPubKey, croppedDataUrl);
+        localStorage.setItem('_App_avatar_' + myPubKey, localDataUrl);
+        localStorage.setItem('_App_avatar_net_' + myPubKey, netDataUrl);
       }
 
-      // Atualiza visualmente na interface (Perfil, Imagem Expandida e Centro do Radar)
-      document.getElementById('profileAvatarImg').src = croppedDataUrl;
-      document.getElementById('avatarExpandedImg').src = croppedDataUrl;
-      document.getElementById('radarCenterAvatarImg').src = croppedDataUrl;
+      document.getElementById('profileAvatarImg').src = localDataUrl;
+      document.getElementById('avatarExpandedImg').src = localDataUrl;
+      document.getElementById('radarCenterAvatarImg').src = localDataUrl;
 
-      // Atualiza no mapa de nós local e propaga na rede
       if (myPubKey && onlineInternetUsers.has(myPubKey)) {
-        onlineInternetUsers.get(myPubKey).avatar = croppedDataUrl;
+        onlineInternetUsers.get(myPubKey).avatar = localDataUrl;
         renderRadarNodes();
       }
 
@@ -452,11 +457,81 @@
       cancelarCrop();
     }
 
-    // 1. LOGIN DETERMINÍSTICO COM RECUPERAÇÃO DO AVATAR SALVO
+    // ================= VALIDAÇÃO DE UNICIDADE DO NOME =================
+    async function verificarNomeDisponivelNaRede(nomeDesejado, pubkeyAtual) {
+      const nomeNormalizado = nomeDesejado.trim().toLowerCase();
+      
+      // 1. Checa registro local prévio
+      const registroLocal = localStorage.getItem('_App_registry_' + nomeNormalizado);
+      if (registroLocal && registroLocal !== pubkeyAtual) {
+        return false;
+      }
+
+      // 2. Consulta os Relays Nostr em busca de quem já possui esse nome (Kind 30078 e 30315)
+      const tempPool = new window.NostrTools.SimplePool();
+      try {
+        const events = await tempPool.list(NOSTR_RELAYS, [
+          { kinds: [30078, 30315], '#t': [APP_IDENTIFIER], limit: 80 }
+        ]);
+        tempPool.close(NOSTR_RELAYS);
+
+        for (const ev of events) {
+          if (ev.pubkey !== pubkeyAtual) {
+            let nomeExistente = null;
+            try {
+              const parsed = JSON.parse(ev.content);
+              if (parsed.name) nomeExistente = parsed.name;
+            } catch (err) {}
+
+            if (!nomeExistente) {
+              const tagNome = ev.tags.find(t => t[0] === 'name');
+              if (tagNome) nomeExistente = tagNome[1];
+            }
+
+            if (nomeExistente && nomeExistente.trim().toLowerCase() === nomeNormalizado) {
+              return false; // Nome já em uso por outra chave
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Aviso na consulta de unicidade nos relays:", e);
+      }
+
+      return true; // Nome liberado
+    }
+
+    // Registra a posse do nome exclusivo na rede
+    async function registrarPosseDoNome(u, pubkey, privkey) {
+      if (!pool) return;
+      const event = {
+        kind: 30078,
+        pubkey: pubkey,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [
+          ['d', 'username_' + u.toLowerCase()],
+          ['t', APP_IDENTIFIER],
+          ['name', u]
+        ],
+        content: JSON.stringify({ name: u, registered_at: Date.now() })
+      };
+      event.id = window.NostrTools.getEventHash(event);
+      event.sig = window.NostrTools.signEvent(event, privkey);
+      try {
+        const pubs = pool.publish(NOSTR_RELAYS, event);
+        if (Array.isArray(pubs)) await Promise.allSettled(pubs);
+      } catch (e) {}
+    }
+
+    // 1. LOGIN DETERMINÍSTICO COM VERIFICAÇÃO DE NOME ÚNICO
     async function conectarApp() {
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value;
+      const btn = document.getElementById('btnConectarSubmit');
+
       if (!u || !p) return alert("Por favor, preencha o usuário e a senha.");
+
+      btn.disabled = true;
+      btn.textContent = "Verificando unicidade do nome...";
 
       const enc = new TextEncoder();
       const passKey = await crypto.subtle.importKey(
@@ -468,10 +543,27 @@
         passKey, 256
       );
 
-      myPrivKey = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
-      myPubKey = window.NostrTools.getPublicKey(myPrivKey);
+      const derivPrivKey = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
+      const derivPubKey = window.NostrTools.getPublicKey(derivPrivKey);
 
-      // Recupera a foto salva deste usuário ou usa o padrão gerado
+      // Bloqueia caso o nome já pertença a outro usuário
+      const disponivel = await verificarNomeDisponivelNaRede(u, derivPubKey);
+      if (!disponivel) {
+        btn.disabled = false;
+        btn.textContent = "Acessar Rede P2P";
+        return alert(`O nome de usuário "${u}" já está em uso por outro usuário. Cada usuário deve ter um nome único. Por favor, escolha outro.`);
+      }
+
+      // Sucesso na validação
+      myPrivKey = derivPrivKey;
+      myPubKey = derivPubKey;
+      myCurrentUsername = u;
+
+      localStorage.setItem('_App_registry_' + u.toLowerCase(), myPubKey);
+
+      btn.disabled = false;
+      btn.textContent = "Acessar Rede P2P";
+
       const userAvatar = localStorage.getItem('_App_avatar_' + myPubKey) || getAvatarUrl(myPubKey);
 
       document.getElementById('profileUsernameLabel').textContent = u;
@@ -483,11 +575,12 @@
       conectarRelaysNostr();
     }
 
-    // 2. CONEXÃO COM OS RELAYS E FILTRAGEM DO _APP
+    // 2. CONEXÃO COM OS RELAYS E TRATAMENTO DE CONFLITOS DE NOME
     function conectarRelaysNostr() {
       pool = new window.NostrTools.SimplePool();
       document.getElementById('redeStatusBadge').textContent = '● CONECTADO AOS RELAYS';
 
+      // Mensagens diretas (kind 4)
       const subMessages = pool.sub(NOSTR_RELAYS, [
         { kinds: [4], '#p': [myPubKey] },
         { kinds: [4], authors: [myPubKey] }
@@ -497,7 +590,7 @@
         try {
           const isSentByMe = event.pubkey === myPubKey;
           const otherUser = isSentByMe ? event.tags.find(t => t[0] === 'p')[1] : event.pubkey;
-          const isAppClient = event.tags.some(t => t[0] === 'client' && t[1] === APP_IDENTIFIER);
+          const isAppClient = event.tags.some(t => (t[0] === 'client' || t[0] === 't') && t[1] === APP_IDENTIFIER);
 
           const text = await window.NostrTools.nip04.decrypt(myPrivKey, otherUser, event.content);
 
@@ -525,15 +618,15 @@
         }
       });
 
-      // Assinatura de presença com leitura de metadados de avatar
+      // Assinatura de presença e registro de nomes
       const subPresence = pool.sub(NOSTR_RELAYS, [
-        { kinds: [30315], '#client': [APP_IDENTIFIER], limit: 50 }
+        { kinds: [30315, 30078], '#t': [APP_IDENTIFIER], limit: 80 }
       ]);
 
       subPresence.on('event', (event) => {
         if (event.pubkey !== myPubKey) {
-          const isAppClient = event.tags.some(t => t[0] === 'client' && t[1] === APP_IDENTIFIER);
-          if (!isAppClient) return;
+          const hasAppTag = event.tags.some(t => (t[0] === 't' || t[0] === 'client' || t[0] === 'd') && t[1] === APP_IDENTIFIER);
+          if (!hasAppTag) return;
 
           let name = event.pubkey.substring(0, 8);
           let avatar = null;
@@ -548,36 +641,49 @@
             else if (event.content && !event.content.startsWith('{')) name = event.content;
           }
 
+          // Se um usuário externo anunciar o mesmo nome já registrado por nós, suprime a duplicidade
+          if (myCurrentUsername && name.trim().toLowerCase() === myCurrentUsername.toLowerCase()) {
+            return;
+          }
+
           registrarUsuarioOnlineInternet(event.pubkey, name, avatar);
         }
       });
 
-      enviarSinalPresencaOnline();
+      // Conexão inicial e propagação
+      setTimeout(() => {
+        registrarPosseDoNome(myCurrentUsername, myPubKey, myPrivKey);
+        enviarSinalPresencaOnline();
+      }, 1000);
+
       if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
-      presenceHeartbeatInterval = setInterval(enviarSinalPresencaOnline, 25000);
+      presenceHeartbeatInterval = setInterval(enviarSinalPresencaOnline, 20000);
     }
 
-    // Envia presença incluindo o avatar salvo do usuário
     async function enviarSinalPresencaOnline() {
       if (!myPrivKey || !myPubKey || !pool) return;
-      const u = document.getElementById('profileUsernameLabel').textContent || 'peer';
-      const myAvatar = localStorage.getItem('_App_avatar_' + myPubKey) || getAvatarUrl(myPubKey);
+      const u = myCurrentUsername || document.getElementById('profileUsernameLabel').textContent || 'peer';
+      const netAvatar = localStorage.getItem('_App_avatar_net_' + myPubKey) || localStorage.getItem('_App_avatar_' + myPubKey) || getAvatarUrl(myPubKey);
 
       const event = {
         kind: 30315,
         pubkey: myPubKey,
         created_at: Math.floor(Date.now() / 1000),
         tags: [
-          ['d', '_App_presence'],
+          ['d', APP_IDENTIFIER],
+          ['t', APP_IDENTIFIER],
           ['client', APP_IDENTIFIER],
           ['name', u]
         ],
-        content: JSON.stringify({ name: u, avatar: myAvatar })
+        content: JSON.stringify({ name: u, avatar: netAvatar })
       };
+
       event.id = window.NostrTools.getEventHash(event);
       event.sig = window.NostrTools.signEvent(event, myPrivKey);
+
       try {
-        await Promise.all(pool.publish(NOSTR_RELAYS, event));
+        const pubs = pool.publish(NOSTR_RELAYS, event);
+        if (Array.isArray(pubs)) await Promise.allSettled(pubs);
       } catch (e) {}
     }
 
@@ -654,10 +760,18 @@
       const activeList = [];
       const now = Date.now();
 
+      // Garante que nomes duplicados não apareçam no radar
+      const nomesNoMapa = new Set();
+      if (myCurrentUsername) nomesNoMapa.add(myCurrentUsername.toLowerCase());
+
       nodesMap.forEach((user) => {
         if (isInternet) {
-          if (now - user.lastSeen < 90000) {
-            activeList.push(user);
+          if (now - user.lastSeen < 75000) {
+            const userNomeLower = (user.name || '').toLowerCase();
+            if (!nomesNoMapa.has(userNomeLower)) {
+              nomesNoMapa.add(userNomeLower);
+              activeList.push(user);
+            }
           }
         } else {
           activeList.push(user);
@@ -701,7 +815,7 @@
       });
     }
 
-    // 5. RENDERIZAR LISTA DE CONVERSAS COM AVATARES PERSISTIDOS
+    // 5. RENDERIZAR LISTA DE CONVERSAS
     function renderConversationsList() {
       const container = document.getElementById('conversasList');
       const peers = Object.keys(conversations);
@@ -788,6 +902,7 @@
         created_at: Math.floor(Date.now() / 1000),
         tags: [
           ['p', activeChatTarget],
+          ['t', APP_IDENTIFIER],
           ['client', APP_IDENTIFIER]
         ],
         content: ciphertext
@@ -796,7 +911,11 @@
       event.id = window.NostrTools.getEventHash(event);
       event.sig = window.NostrTools.signEvent(event, myPrivKey);
 
-      await Promise.all(pool.publish(NOSTR_RELAYS, event));
+      try {
+        const pubs = pool.publish(NOSTR_RELAYS, event);
+        if (Array.isArray(pubs)) await Promise.allSettled(pubs);
+      } catch (e) {}
+
       input.value = '';
     }
 
@@ -810,6 +929,7 @@
       if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
       myPrivKey = null;
       myPubKey = null;
+      myCurrentUsername = null;
       activeChatTarget = null;
       onlineInternetUsers.clear();
       bluetoothUsers.clear();
