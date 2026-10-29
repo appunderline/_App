@@ -80,11 +80,12 @@
     .telemetry-stat-item { display: flex; align-items: center; gap: 7px; }
     .telemetry-stat-num { font-size: 24px; font-weight: 800; color: #fff; line-height: 1; letter-spacing: -0.5px; min-width: 16px; }
     .telemetry-stat-label { display: flex; flex-direction: column; font-size: 10.5px; color: var(--text-sub); font-weight: 500; letter-spacing: -0.1px; line-height: 1.15; white-space: nowrap; }
-    .bottom-bar { position: absolute; bottom: 16px; left: 16px; right: 16px; height: 66px; background: rgba(10, 19, 41, 0.95); backdrop-filter: blur(25px); border: 1px solid var(--border-soft); border-radius: 36px; display: flex; justify-content: space-around; align-items: center; padding: 0 8px; z-index: 50; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.08); }
-    .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: transparent; border: none; color: var(--text-sub); cursor: pointer; height: 50px; padding: 0 12px; border-radius: 25px; transition: all 0.2s ease; }
-    .nav-btn span { font-size: 10.5px; font-weight: 600; }
-    .nav-btn.active { color: var(--accent-blue); background: rgba(56, 189, 248, 0.14); }
-    .nav-profile-thumb { width: 25px; height: 25px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--border-soft); }
+    .bottom-bar { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); height: auto; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 9999px; display: flex; justify-content: center; align-items: center; padding: 8px 14px; gap: 12px; z-index: 50; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45); width: auto; max-width: calc(100% - 32px); }
+    .nav-btn { width: 50px; height: 50px; border-radius: 50%; background: rgba(35, 39, 46, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); flex-shrink: 0; outline: none; position: relative; padding: 0; }
+    .nav-btn:active { transform: scale(0.90); }
+    .nav-btn span { display: none; }
+    .nav-btn.active { background: rgba(10, 31, 61, 0.85); color: var(--accent-blue); border: 1.5px solid var(--accent-blue); box-shadow: 0 0 14px rgba(56, 189, 248, 0.5); }
+    .nav-profile-thumb { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; display: block; border: 1.5px solid transparent; }
     .nav-btn.active .nav-profile-thumb { border-color: var(--accent-blue); box-shadow: 0 0 8px rgba(56, 189, 248, 0.7); }
     .auth-overlay-art { position: absolute; inset: 0; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 24px 34px 24px; overflow: hidden; background: #040714; }
     .auth-bg-custom-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; pointer-events: none; }
@@ -142,11 +143,11 @@
     .call-avatar-img { width: 100%; height: 100%; border-radius: 30px; object-fit: cover; background: #0a1329; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
     .call-peer-name { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
     .call-status-label { font-size: 13px; color: var(--accent-blue); font-weight: 600; letter-spacing: -0.1px; }
-    .call-controls-pill-bar { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 20; display: flex; justify-content: center; align-items: center; gap: 12px; padding: 8px 14px; background: rgba(255, 255, 255, 0.28); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.25); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.55); }
-    .call-ctrl-btn { width: 50px; height: 50px; border-radius: 50%; background: #23272e; border: none; color: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4); flex-shrink: 0; outline: none; }
+    .call-controls-pill-bar { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 20; display: flex; justify-content: center; align-items: center; gap: 12px; padding: 8px 14px; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45); }
+    .call-ctrl-btn { width: 50px; height: 50px; border-radius: 50%; background: rgba(35, 39, 46, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); color: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); flex-shrink: 0; outline: none; }
     .call-ctrl-btn:active { transform: scale(0.90); }
-    .call-ctrl-btn.active-off { background: #3b1b22; color: #ef4444; }
-    .call-ctrl-btn.btn-hangup { background: #23272e; color: #ef4444; }
+    .call-ctrl-btn.active-off { background: rgba(59, 27, 34, 0.85); color: #ef4444; }
+    .call-ctrl-btn.btn-hangup { background: rgba(35, 39, 46, 0.75); color: #ef4444; }
     .call-ctrl-btn.btn-hangup:active { background: #ef4444; color: #fff; }
     .incoming-call-modal { position: absolute; top: 14px; left: 14px; right: 14px; background: rgba(10, 19, 41, 0.98); backdrop-filter: blur(20px); border: 1px solid var(--accent-blue); border-radius: 24px; padding: 16px; z-index: 105; display: none; align-items: center; justify-content: space-between; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(56, 189, 248, 0.25); animation: slideDown 0.25s ease-out; }
     @keyframes slideDown { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -207,7 +208,7 @@
 
       <audio id="remoteAudioElem" autoplay></audio>
 
-      <!-- BARRA DE CONTROLES ESTILO CÁPSULA (PILL BAR) COM 4 BOTÕES -->
+      <!-- BARRA DE CONTROLES ESTILO CÁPSULA TRANSLÚCIDA -->
       <div class="call-controls-pill-bar">
         
         <!-- 1: Troca de Câmeras Frontal / Traseira com seta circular -->
@@ -562,24 +563,24 @@
 
     </main>
 
-    <!-- ================= BARRA DE NAVEGAÇÃO FLUTUANTE ================= -->
+    <!-- ================= BARRA DE NAVEGAÇÃO FLUTUANTE (CÁPSULA COM MAIOR TRANSPARÊNCIA) ================= -->
     <nav class="bottom-bar">
-      <button class="nav-btn active" id="btn-conversas" onclick="switchTab('conversas')">
+      <button class="nav-btn active" id="btn-conversas" onclick="switchTab('conversas')" title="Conversas">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span>Conversas</span>
       </button>
 
-      <button class="nav-btn" id="btn-rede" onclick="switchTab('rede')">
+      <button class="nav-btn" id="btn-rede" onclick="switchTab('rede')" title="Rede">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="12" y1="7.5" x2="6" y2="15.5"/><line x1="12" y1="7.5" x2="18" y2="15.5"/><line x1="8.5" y1="18" x2="15.5" y2="18"/></svg>
         <span>Rede</span>
       </button>
 
-      <button class="nav-btn" id="btn-arquivos" onclick="switchTab('arquivos')">
+      <button class="nav-btn" id="btn-arquivos" onclick="switchTab('arquivos')" title="Arquivos">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5"/></svg>
         <span>Arquivos</span>
       </button>
 
-      <button class="nav-btn" id="btn-perfil" onclick="switchTab('perfil')">
+      <button class="nav-btn" id="btn-perfil" onclick="switchTab('perfil')" title="Perfil">
         <img id="navProfileThumb" class="nav-profile-thumb" src="https://api.dicebear.com/7.x/identicon/svg?seed=user" alt="Perfil">
         <span>Perfil</span>
       </button>
@@ -650,7 +651,6 @@
     }
 
     function registrarInteracao() {
-      // Registra interação de atividade de rede
       atualizarTelemetriaMapa();
     }
 
@@ -1399,7 +1399,6 @@
       if (!localMediaStream) return;
 
       if (activeCallType === 'audio') {
-        // Promover de chamada de áudio para vídeo
         try {
           const videoStream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: currentCameraFacingMode, width: { ideal: 640 }, height: { ideal: 480 } }
