@@ -131,22 +131,23 @@
     .media-options-popup { position: absolute; bottom: 68px; right: 64px; background: #0b152d; border: 1px solid var(--border-soft); border-radius: 16px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85); display: none; flex-direction: column; min-width: 175px; overflow: hidden; z-index: 85; animation: fadeIn 0.15s ease-in-out; }
     .media-option-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #f8fafc; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
     .media-option-item:hover, .media-option-item:active { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue); }
-    .call-screen-overlay { position: absolute; inset: 0; background: #040816; z-index: 95; display: none; flex-direction: column; justify-content: space-between; overflow: hidden; animation: fadeIn 0.2s ease-in-out; }
+    .call-screen-overlay { position: absolute; inset: 0; background: radial-gradient(circle at 50% 25%, #0b1c3a 0%, #030713 80%); z-index: 95; display: none; flex-direction: column; justify-content: space-between; overflow: hidden; animation: fadeIn 0.2s ease-in-out; }
     .call-video-container { position: absolute; inset: 0; z-index: 1; display: none; background: #000; }
     #remoteVideoElem { width: 100%; height: 100%; object-fit: cover; }
-    #localVideoElem { position: absolute; top: 60px; right: 16px; width: 95px; height: 135px; border-radius: 16px; object-fit: cover; border: 2px solid var(--accent-blue); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8); z-index: 10; background: #0a1329; }
+    #localVideoElem { position: absolute; top: 54px; right: 16px; width: 95px; height: 135px; border-radius: 16px; object-fit: cover; border: 2px solid var(--accent-blue); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8); z-index: 10; background: #0a1329; }
     .call-audio-container { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-    .call-avatar-wrap { width: 110px; height: 110px; border-radius: 28px; position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-    .call-avatar-ring { position: absolute; inset: -6px; border-radius: 34px; border: 2px solid var(--accent-blue); animation: pulseCallRing 2.5s infinite; }
+    .call-avatar-wrap { width: 120px; height: 120px; border-radius: 32px; position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
+    .call-avatar-ring { position: absolute; inset: -6px; border-radius: 38px; border: 2px solid var(--accent-blue); animation: pulseCallRing 2.5s infinite; }
     @keyframes pulseCallRing { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 0.2; } 100% { transform: scale(0.95); opacity: 0.8; } }
-    .call-avatar-img { width: 100%; height: 100%; border-radius: 28px; object-fit: cover; background: #0a1329; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
-    .call-peer-name { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+    .call-avatar-img { width: 100%; height: 100%; border-radius: 30px; object-fit: cover; background: #0a1329; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+    .call-peer-name { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
     .call-status-label { font-size: 13px; color: var(--accent-blue); font-weight: 600; letter-spacing: -0.1px; }
-    .call-controls-bar { position: absolute; bottom: 30px; left: 0; right: 0; z-index: 20; display: flex; justify-content: center; align-items: center; gap: 20px; padding: 0 20px; }
-    .call-ctrl-btn { width: 52px; height: 52px; border-radius: 50%; background: rgba(10, 19, 41, 0.85); backdrop-filter: blur(15px); border: 1px solid var(--border-soft); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-    .call-ctrl-btn.active-off { background: #ef4444; border-color: #ef4444; }
-    .call-end-btn { width: 60px; height: 60px; border-radius: 50%; background: #ef4444; border: none; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5); transition: transform 0.15s; }
-    .call-end-btn:active { transform: scale(0.92); }
+    .call-controls-pill-bar { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 20; display: flex; justify-content: center; align-items: center; gap: 12px; padding: 8px 14px; background: rgba(255, 255, 255, 0.28); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.25); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.55); }
+    .call-ctrl-btn { width: 50px; height: 50px; border-radius: 50%; background: #23272e; border: none; color: #ffffff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4); flex-shrink: 0; outline: none; }
+    .call-ctrl-btn:active { transform: scale(0.90); }
+    .call-ctrl-btn.active-off { background: #3b1b22; color: #ef4444; }
+    .call-ctrl-btn.btn-hangup { background: #23272e; color: #ef4444; }
+    .call-ctrl-btn.btn-hangup:active { background: #ef4444; color: #fff; }
     .incoming-call-modal { position: absolute; top: 14px; left: 14px; right: 14px; background: rgba(10, 19, 41, 0.98); backdrop-filter: blur(20px); border: 1px solid var(--accent-blue); border-radius: 24px; padding: 16px; z-index: 105; display: none; align-items: center; justify-content: space-between; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(56, 189, 248, 0.25); animation: slideDown 0.25s ease-out; }
     @keyframes slideDown { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .incoming-accept-btn { width: 44px; height: 44px; border-radius: 50%; background: #10b981; border: none; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
@@ -206,16 +207,45 @@
 
       <audio id="remoteAudioElem" autoplay></audio>
 
-      <div class="call-controls-bar">
+      <!-- BARRA DE CONTROLES ESTILO CÁPSULA (PILL BAR) COM 4 BOTÕES -->
+      <div class="call-controls-pill-bar">
+        
+        <!-- 1: Troca de Câmeras Frontal / Traseira com seta circular -->
+        <button id="btnSwitchCamera" class="call-ctrl-btn" onclick="alternarCameraP2P()" title="Alternar Câmera">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7h-3.5l-1.5-2h-6L7.5 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+            <path d="M10 12.5a2.5 2.5 0 0 1 4.5 1.5"/>
+            <path d="M14 15.5a2.5 2.5 0 0 1-4.5-1.5"/>
+            <polyline points="15 11 15 13.5 12.5 13.5"/>
+            <polyline points="9 17 9 14.5 11.5 14.5"/>
+          </svg>
+        </button>
+
+        <!-- 2: Microfone (Mudo / Ativado) -->
         <button id="btnToggleMute" class="call-ctrl-btn" onclick="toggleMuteMedia()" title="Microfone">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <svg id="iconMicCall" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
         </button>
+
+        <!-- 3: Câmera de Vídeo (Ligar / Desligar vídeo) -->
         <button id="btnToggleVideo" class="call-ctrl-btn" onclick="toggleVideoMedia()" title="Câmera">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="13" height="14" rx="3"/><path d="M15 9.5l6-3.5v12l-6-3.5z"/></svg>
+          <svg id="iconVideoCall" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="13" height="14" rx="3"/>
+            <path d="M15 9.5l6-3.5v12l-6-3.5z"/>
+          </svg>
         </button>
-        <button class="call-end-btn" onclick="encerrarChamada()" title="Desligar">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+
+        <!-- 4: Desligar Chamada (Telefone curvo vermelho) -->
+        <button id="btnEndCall" class="call-ctrl-btn btn-hangup" onclick="encerrarChamada()" title="Encerrar Chamada">
+          <svg width="22" height="13" viewBox="0 0 24 14" fill="#ef4444">
+            <path d="M23.5 4.5C21.3 1.7 17.1 0 12 0S2.7 1.7.5 4.5c-.7.9-.6 2.2.3 3l2.2 2.2c.8.8 2.1.8 2.9 0l2.8-2.8c.4-.4.6-.9.6-1.5V3.8c1.2-.4 2.4-.6 3.7-.6s2.5.2 3.7.6v1.6c0 .6.2 1.1.6 1.5l2.8 2.8c.8.8 2.1.8 2.9 0l2.2-2.2c.9-.8 1-2.1.3-3z"/>
+          </svg>
         </button>
+
       </div>
     </div>
 
@@ -344,7 +374,6 @@
       <input type="file" id="chatGalleryInput" accept="image/*" style="display: none;" onchange="handleMediaSelected(event, 'Imagem')">
 
       <div class="chat-room-input-bar">
-        <!-- Menu Flutuante de 3 Opções de Mídia -->
         <div id="mediaOptionsPopup" class="media-options-popup">
           <div class="media-option-item" onclick="abrirCapturaMidia('photo')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -367,7 +396,6 @@
           
           <input type="text" id="chatMessageInput" placeholder="Mensagem" oninput="handleChatInput(this)" onkeydown="if(event.key==='Enter')enviarMensagemNostr()">
           
-          <!-- Botão que abre as 3 opções -->
           <button class="pill-icon-btn" type="button" onclick="toggleMediaOptionsPopup(event)" title="Opções de Mídia">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </button>
@@ -587,6 +615,7 @@
     let callSecondsCount = 0;
     let pendingIncomingCall = null;
     let iceCandidatesQueue = [];
+    let currentCameraFacingMode = 'user';
 
     const RTC_PEER_CONFIG = {
       iceServers: [
@@ -617,6 +646,11 @@
     function registrarArquivoEnviado() {
       arquivosEnviadosHojeCount++;
       localStorage.setItem('_App_arquivos_enviados_' + hojeStr, arquivosEnviadosHojeCount.toString());
+      atualizarTelemetriaMapa();
+    }
+
+    function registrarInteracao() {
+      // Registra interação de atividade de rede
       atualizarTelemetriaMapa();
     }
 
@@ -1062,6 +1096,7 @@
       if (!activeChatTarget) return;
       activeCallType = type;
       activeCallPeer = activeChatTarget;
+      currentCameraFacingMode = 'user';
 
       const user = onlineInternetUsers.get(activeCallPeer);
       const peerName = (user && user.name) || localStorage.getItem('_App_name_' + activeCallPeer) || 'Contato';
@@ -1076,7 +1111,7 @@
       try {
         localMediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
-          video: (type === 'video') ? { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } : false
+          video: (type === 'video') ? { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: currentCameraFacingMode } : false
         });
 
         if (type === 'video') {
@@ -1108,16 +1143,61 @@
       document.getElementById('callScreenOverlay').style.display = 'flex';
       const videoCont = document.getElementById('callVideoContainer');
       const audioCont = document.getElementById('callAudioContainer');
+      const btnSwitch = document.getElementById('btnSwitchCamera');
       const btnVid = document.getElementById('btnToggleVideo');
 
       if (type === 'video') {
         videoCont.style.display = 'block';
         audioCont.style.display = 'none';
-        btnVid.style.display = 'flex';
+        btnSwitch.style.opacity = '1';
+        btnSwitch.style.pointerEvents = 'auto';
+        btnVid.classList.remove('active-off');
       } else {
         videoCont.style.display = 'none';
         audioCont.style.display = 'flex';
-        btnVid.style.display = 'none';
+        btnSwitch.style.opacity = '0.4';
+        btnSwitch.style.pointerEvents = 'none';
+        btnVid.classList.add('active-off');
+      }
+
+      document.getElementById('btnToggleMute').classList.remove('active-off');
+    }
+
+    // Alternar câmera frontal/traseira
+    async function alternarCameraP2P() {
+      if (activeCallType !== 'video' || !localMediaStream) return;
+      currentCameraFacingMode = (currentCameraFacingMode === 'user') ? 'environment' : 'user';
+
+      try {
+        const oldTrack = localMediaStream.getVideoTracks()[0];
+        if (oldTrack) oldTrack.stop();
+
+        let newStream;
+        try {
+          newStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: currentCameraFacingMode }, width: { ideal: 640 }, height: { ideal: 480 } }
+          });
+        } catch (fallbackErr) {
+          newStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: currentCameraFacingMode, width: { ideal: 640 }, height: { ideal: 480 } }
+          });
+        }
+
+        const newVideoTrack = newStream.getVideoTracks()[0];
+        if (oldTrack) localMediaStream.removeTrack(oldTrack);
+        localMediaStream.addTrack(newVideoTrack);
+
+        const localVid = document.getElementById('localVideoElem');
+        if (localVid) localVid.srcObject = localMediaStream;
+
+        if (peerConnection) {
+          const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+          if (sender) {
+            sender.replaceTrack(newVideoTrack);
+          }
+        }
+      } catch (err) {
+        console.warn("Não foi possível alternar de câmera:", err);
       }
     }
 
@@ -1218,6 +1298,7 @@
       pendingIncomingCall = null;
       activeCallType = callInfo.callType;
       activeCallPeer = callInfo.fromPubkey;
+      currentCameraFacingMode = 'user';
 
       const user = onlineInternetUsers.get(activeCallPeer);
       const peerName = (user && user.name) || localStorage.getItem('_App_name_' + activeCallPeer) || 'Contato';
@@ -1232,7 +1313,7 @@
       try {
         localMediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
-          video: (activeCallType === 'video') ? { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } : false
+          video: (activeCallType === 'video') ? { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: currentCameraFacingMode } : false
         });
 
         if (activeCallType === 'video') {
@@ -1314,8 +1395,38 @@
       }
     }
 
-    function toggleVideoMedia() {
+    async function toggleVideoMedia() {
       if (!localMediaStream) return;
+
+      if (activeCallType === 'audio') {
+        // Promover de chamada de áudio para vídeo
+        try {
+          const videoStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: currentCameraFacingMode, width: { ideal: 640 }, height: { ideal: 480 } }
+          });
+          const vTrack = videoStream.getVideoTracks()[0];
+          localMediaStream.addTrack(vTrack);
+          activeCallType = 'video';
+
+          document.getElementById('localVideoElem').srcObject = localMediaStream;
+          document.getElementById('callVideoContainer').style.display = 'block';
+          document.getElementById('callAudioContainer').style.display = 'none';
+
+          const btnSwitch = document.getElementById('btnSwitchCamera');
+          btnSwitch.style.opacity = '1';
+          btnSwitch.style.pointerEvents = 'auto';
+
+          document.getElementById('btnToggleVideo').classList.remove('active-off');
+
+          if (peerConnection) {
+            peerConnection.addTrack(vTrack, localMediaStream);
+          }
+        } catch (e) {
+          alert("Não foi possível ligar a câmera: " + e.message);
+        }
+        return;
+      }
+
       const videoTrack = localMediaStream.getVideoTracks()[0];
       if (videoTrack) {
         videoTrack.enabled = !videoTrack.enabled;
