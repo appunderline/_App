@@ -331,14 +331,48 @@
   <!-- AUTH SCREEN -->
   <div id="auth-screen" class="screen active">
     <div class="auth-logo">_App</div>
-    <div class="auth-card">
-      <div class="auth-tabs">
-        <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
-        <button class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">Criar Perfil</button>
+    
+    <!-- TELA 1: ENTRAR -->
+    <div class="auth-card" id="card-auth-login">
+      <input type="text" id="login-username" class="auth-input" placeholder="Nome de Usuário" autocomplete="off">
+      <input type="password" id="login-password" class="auth-input" placeholder="Senha">
+      <button class="auth-btn" id="btn-login-submit" onclick="fazerLogin()">Entrar</button>
+      
+      <div style="margin-top: 18px; text-align: center;">
+        <span style="color: var(--neon-blue); font-weight: 700; cursor: pointer; font-size: 14px;" onclick="irParaCriarPerfil()">Criar perfil</span>
       </div>
-      <input type="text" id="auth-username" class="auth-input" placeholder="Nome de Usuário" autocomplete="off">
-      <input type="password" id="auth-password" class="auth-input" placeholder="Senha">
-      <button class="auth-btn" id="auth-submit-btn" onclick="handleAuthSubmit()">Entrar</button>
+    </div>
+
+    <!-- TELA 2: CRIAR PERFIL -->
+    <div class="auth-card" id="card-auth-register" style="display: none;">
+      <div style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 15px; text-align: center;">Novo Perfil</div>
+      <input type="text" id="register-username" class="auth-input" placeholder="Nome de Usuário" autocomplete="off">
+      <input type="password" id="register-password" class="auth-input" placeholder="Senha">
+      <button class="auth-btn" onclick="validarCriacaoPerfil()">Continuar</button>
+      
+      <div style="margin-top: 18px; text-align: center;">
+        <span style="color: var(--text-muted); font-size: 13px;">Já tem conta? </span>
+        <span style="color: var(--neon-blue); font-weight: 700; cursor: pointer; font-size: 13px;" onclick="voltarParaLogin()">Entrar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP OBRIGATÓRIO: SENHA EXTRA DE 7 PALAVRAS -->
+  <div class="modal-overlay" id="modal-frase-lembrete">
+    <div class="modal-dialog-box" style="max-width: 350px;">
+      <div class="modal-dialog-top">
+        <span class="modal-dialog-title">Frase Lembrete</span>
+      </div>
+      <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+        Crie uma senha extra caso esqueça a primeira. Digite <strong>obrigatoriamente 7 palavras</strong> separadas por espaço:
+      </p>
+      <textarea id="frase-lembrete-input" class="auth-input" style="height: 75px; resize: none; font-size: 13px;" placeholder="palavra1 palavra2 palavra3 palavra4 palavra5 palavra6 palavra7" oninput="atualizarContadorFrase(this.value)"></textarea>
+      <div id="frase-lembrete-contador" style="font-size: 12px; font-weight: bold; color: var(--neon-blue); text-align: right; margin-top: -6px; margin-bottom: 14px;">0 / 7 palavras</div>
+      
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="auth-btn btn-secondary" onclick="cancelarFraseLembrete()" style="width: auto; padding: 9px 15px; font-size: 13px;">Cancelar</button>
+        <button class="auth-btn" onclick="concluirRegistroComFrase()" style="width: auto; padding: 9px 18px; font-size: 13px;">Criar Perfil</button>
+      </div>
     </div>
   </div>
 
@@ -940,13 +974,7 @@
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   }
 
-  let authMode = 'login';
-  function switchAuthTab(mode) {
-    authMode = mode;
-    document.getElementById('tab-login').classList.toggle('active', mode === 'login');
-    document.getElementById('tab-register').classList.toggle('active', mode === 'register');
-    document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'Entrar' : 'Criar Perfil';
-  }
+
 
   function obterContatoPorPubkey(pubKey) {
     const pId = (pubKey || '').toLowerCase().trim();
@@ -1079,57 +1107,6 @@
       fileTransfers = salvas ? JSON.parse(salvas).filter(item => (agora - item.date) <= seteDiasEmMs) : [];
     } catch(e) {
       fileTransfers = [];
-    }
-  }
-
-  async function handleAuthSubmit() {
-    const user = document.getElementById('auth-username').value.trim();
-    const pass = document.getElementById('auth-password').value;
-    if (!user || !pass) return await showAppAlert('Preencha todos os campos para prosseguir!', 'Campos Obrigatórios');
-
-    const btn = document.getElementById('auth-submit-btn');
-    btn.disabled = true;
-    btn.innerText = "Conectando...";
-
-    try {
-      const enc = new TextEncoder();
-      const passKey = await crypto.subtle.importKey("raw", enc.encode(pass), { name: "PBKDF2" }, false, ["deriveBits"]);
-      const keyBits = await crypto.subtle.deriveBits(
-        { name: "PBKDF2", salt: enc.encode("nostr_salt_" + user.toLowerCase()), iterations: 100000, hash: "SHA-256" },
-        passKey, 256
-      );
-
-      eccPrivateKeyHex = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
-      eccPublicKeyHex = window.NostrTools.getPublicKey(eccPrivateKeyHex);
-      localStorage.setItem('_app_saved_pubkey', eccPublicKeyHex);
-
-      const userAvatarKey = `_app_avatar_${eccPublicKeyHex}`;
-      const savedAvatar = localStorage.getItem(userAvatarKey);
-
-      currentUser = { username: user, pubKey: eccPublicKeyHex, customAvatar: savedAvatar || null };
-      registrarPerfilConhecido(eccPublicKeyHex, user, currentUser.customAvatar);
-      atualizarStatusPresenca('online', false);
-
-      document.getElementById('profile-username-label').innerText = currentUser.username;
-      document.getElementById('profile-ecc-pubkey-short').innerText = eccPublicKeyHex.substring(0, 10) + '...' + eccPublicKeyHex.substring(eccPublicKeyHex.length - 8);
-      atualizarAvatarPerfilDisplay();
-
-      carregarConversasSalvas();
-      carregarHistoricoArquivos();
-      atualizarExibicaoPastaDownload();
-
-      iniciarConexaoNostr();
-
-      document.getElementById('auth-screen').classList.remove('active');
-      document.getElementById('conversas-screen').classList.add('active');
-      renderizarConversas(contacts);
-      renderizarHistoricoArquivos();
-      renderizarRadar();
-    } catch (err) {
-      await showAppAlert("Erro ao inicializar credenciais de criptografia: " + err.message, "Erro de Autenticação");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = authMode === 'login' ? 'Entrar' : 'Criar Perfil';
     }
   }
 
@@ -2327,6 +2304,7 @@
     let hasMoved = false;
     let preventNextClick = false;
     let clickTimeout = null;
+    let tempRegisterData = null;
 
     const fecharOutrosSwipes = () => {
       document.querySelectorAll('.conversa-item.swiped, .transfer-item-content.swiped').forEach(el => {
@@ -2987,6 +2965,199 @@
       if (tabs[tabIndex]) tabs[tabIndex].classList.add('active');
 
     });
+  }
+
+function irParaCriarPerfil() {
+    document.getElementById('card-auth-login').style.display = 'none';
+    document.getElementById('card-auth-register').style.display = 'block';
+    document.getElementById('register-username').value = '';
+    document.getElementById('register-password').value = '';
+    document.getElementById('register-username').focus();
+  }
+
+  function voltarParaLogin() {
+    document.getElementById('card-auth-register').style.display = 'none';
+    document.getElementById('card-auth-login').style.display = 'block';
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-username').focus();
+  }
+
+  function obterContasCadastradas() {
+    try {
+      const db = localStorage.getItem('_app_registered_users');
+      return db ? JSON.parse(db) : {};
+    } catch(e) { return {}; }
+  }
+
+  function salvarContasCadastradas(contas) {
+    localStorage.setItem('_app_registered_users', JSON.stringify(contas));
+  }
+
+  async function hashTexto(texto) {
+    const enc = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', enc.encode(texto));
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // ENTRAR: Só permite login se a conta existir
+  async function fazerLogin() {
+    const user = document.getElementById('login-username').value.trim();
+    const pass = document.getElementById('login-password').value;
+
+    if (!user || !pass) {
+      return await showAppAlert('Preencha o Nome de Usuário e a Senha.', 'Campos Obrigatórios');
+    }
+
+    const contas = obterContasCadastradas();
+    const chaveUser = user.toLowerCase();
+    const conta = contas[chaveUser];
+
+    // Se o perfil não existir, bloqueia sumariamente
+    if (!conta) {
+      return await showAppAlert('Credenciais inválidas.', 'Acesso Negado');
+    }
+
+    const senhaHash = await hashTexto(pass + "_salt_" + chaveUser);
+    if (conta.passHash !== senhaHash) {
+      return await showAppAlert('Credenciais inválidas', 'Acesso Negado');
+    }
+
+    const btn = document.getElementById('btn-login-submit');
+    btn.disabled = true;
+    btn.innerText = 'Entrando...';
+
+    try {
+      await inicializarSessaoApp(conta.username, pass);
+    } catch(err) {
+      await showAppAlert('Erro ao entrar: ' + err.message, 'Erro');
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'Entrar';
+    }
+  }
+
+  function atualizarContadorFrase(valor) {
+    const palavras = valor.trim().split(/\s+/).filter(w => w.length > 0);
+    const contador = document.getElementById('frase-lembrete-contador');
+    contador.innerText = `${palavras.length} / 7 palavras`;
+    contador.style.color = (palavras.length === 7) ? 'var(--badge-green)' : 'var(--neon-blue)';
+  }
+
+  function cancelarFraseLembrete() {
+    document.getElementById('modal-frase-lembrete').classList.remove('active');
+    tempRegisterData = null;
+  }
+
+function verificarSeUsuarioExiste(user) {
+    const chave = user.toLowerCase().trim();
+    const contas = obterContasCadastradas();
+    
+    if (contas[chave]) return true;
+
+    // Garante a detecção mesmo se a conta foi criada antes no navegador
+    if (
+      localStorage.getItem(`_app_conversas_${chave}`) !== null ||
+      localStorage.getItem(`_app_conversas_${user}`) !== null ||
+      localStorage.getItem(`_app_transfers_${chave}`) !== null ||
+      localStorage.getItem(`_app_transfers_${user}`) !== null
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  // CRIAR PERFIL: Bloqueia imediatamente usuários já cadastrados
+  async function validarCriacaoPerfil() {
+    const user = document.getElementById('register-username').value.trim();
+    const pass = document.getElementById('register-password').value;
+
+    if (!user || !pass) {
+      return await showAppAlert('Informe o Nome de Usuário e a Senha desejados.', 'Campos Obrigatórios');
+    }
+
+    // Se já tiver cadastro, emite o alerta e NÃO abre o pop-up da frase
+    if (verificarSeUsuarioExiste(user)) {
+      return await showAppAlert('Esse usuário já possui credenciais', 'Aviso');
+    }
+
+    tempRegisterData = { username: user, password: pass };
+    document.getElementById('frase-lembrete-input').value = '';
+    atualizarContadorFrase('');
+    document.getElementById('modal-frase-lembrete').classList.add('active');
+  }
+
+  // Confirmação final da frase de 7 palavras
+  async function concluirRegistroComFrase() {
+    if (!tempRegisterData) return;
+    const input = document.getElementById('frase-lembrete-input');
+    const palavras = input.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+    if (palavras.length !== 7) {
+      return await showAppAlert(`A frase deve ter obrigatoriamente 7 palavras. Você digitou ${palavras.length}.`, 'Frase Incompleta');
+    }
+
+    const user = tempRegisterData.username;
+    const pass = tempRegisterData.password;
+    const chaveUser = user.toLowerCase();
+
+    // Bloqueio de segurança redundante
+    if (verificarSeUsuarioExiste(user)) {
+      cancelarFraseLembrete();
+      return await showAppAlert('Esse usuário já possui credenciais', 'Aviso');
+    }
+
+    const contas = obterContasCadastradas();
+    contas[chaveUser] = {
+      username: user,
+      passHash: await hashTexto(pass + "_salt_" + chaveUser),
+      fraseHash: await hashTexto(palavras.join(' ').toLowerCase()),
+      dataCriacao: Date.now()
+    };
+    salvarContasCadastradas(contas);
+
+    cancelarFraseLembrete();
+
+    try {
+      await inicializarSessaoApp(user, pass);
+    } catch(err) {
+      await showAppAlert('Erro ao iniciar sessão: ' + err.message, 'Erro');
+    }
+  }
+
+  // Gera as chaves e abre as telas do app
+  async function inicializarSessaoApp(user, pass) {
+    const enc = new TextEncoder();
+    const passKey = await crypto.subtle.importKey("raw", enc.encode(pass), { name: "PBKDF2" }, false, ["deriveBits"]);
+    const keyBits = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", salt: enc.encode("nostr_salt_" + user.toLowerCase()), iterations: 100000, hash: "SHA-256" },
+      passKey, 256
+    );
+
+    eccPrivateKeyHex = Array.from(new Uint8Array(keyBits)).map(b => b.toString(16).padStart(2, '0')).join('');
+    eccPublicKeyHex = window.NostrTools.getPublicKey(eccPrivateKeyHex);
+    localStorage.setItem('_app_saved_pubkey', eccPublicKeyHex);
+
+    const savedAvatar = localStorage.getItem(`_app_avatar_${eccPublicKeyHex}`);
+    currentUser = { username: user, pubKey: eccPublicKeyHex, customAvatar: savedAvatar || null };
+    registrarPerfilConhecido(eccPublicKeyHex, user, currentUser.customAvatar);
+    atualizarStatusPresenca('online', false);
+
+    document.getElementById('profile-username-label').innerText = currentUser.username;
+    document.getElementById('profile-ecc-pubkey-short').innerText = eccPublicKeyHex.substring(0, 10) + '...' + eccPublicKeyHex.substring(eccPublicKeyHex.length - 8);
+    atualizarAvatarPerfilDisplay();
+
+    carregarConversasSalvas();
+    carregarHistoricoArquivos();
+    atualizarExibicaoPastaDownload();
+
+    iniciarConexaoNostr();
+
+    document.getElementById('auth-screen').classList.remove('active');
+    document.getElementById('conversas-screen').classList.add('active');
+    renderizarConversas(contacts);
+    renderizarHistoricoArquivos();
+    renderizarRadar();
   }
 
   let privateKeyRevealed = false;
